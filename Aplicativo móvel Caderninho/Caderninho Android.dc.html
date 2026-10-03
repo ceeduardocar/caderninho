@@ -72,15 +72,15 @@ input:focus,select:focus{outline:none;border-color:#3558D6 !important;background
             <p style="margin:0;color:#C9D3F5;font-size:16px">{{ greeting }}</p>
             <p style="margin:12px 0 2px;font-weight:700;color:#FFE14D;font-size:13px;letter-spacing:.08em;text-transform:uppercase">Para receber</p>
             <p style="margin:0 0 14px;font:800 50px/1.05 'Bricolage Grotesque',sans-serif;color:#fff;letter-spacing:-.035em;font-variant-numeric:tabular-nums"><span style="background-image:linear-gradient(100deg,transparent 0 1%,#FFE14D 3% 97%,transparent 99%);background-repeat:no-repeat;background-size:100% 7px;background-position:0 94%;padding:0 .08em;margin:0 -.08em">{{ total }}</span></p>
-            <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <div style="display:flex;flex-wrap:wrap;gap:6px">
               <sc-if value="{{ hasLate }}" hint-placeholder-val="{{ true }}">
-                <button onClick="{{ goLate }}" style="display:inline-flex;align-items:center;min-height:34px;padding:6px 13px;border-radius:999px;line-height:1.25;background:#FBE8E6;color:#BE3A30;font-size:15px;font-weight:700;border:0;cursor:pointer">{{ lateLabel }}</button>
+                <button onClick="{{ goLate }}" style="display:inline-flex;align-items:center;min-height:34px;padding:6px 10px;border-radius:999px;line-height:1.25;background:#FBE8E6;color:#BE3A30;font-size:13px;font-weight:700;border:0;cursor:pointer">{{ lateLabel }}</button>
               </sc-if>
               <sc-if value="{{ noLate }}" hint-placeholder-val="{{ false }}">
-                <span style="display:inline-flex;align-items:center;min-height:34px;padding:6px 13px;border-radius:999px;line-height:1.25;background:#E2F3E9;color:#15774A;font-size:15px;font-weight:700">Nada em atraso</span>
+                <span style="display:inline-flex;align-items:center;min-height:34px;padding:6px 10px;border-radius:999px;line-height:1.25;background:#E2F3E9;color:#15774A;font-size:13px;font-weight:700">Nada em atraso</span>
               </sc-if>
               <sc-if value="{{ hasWeek }}" hint-placeholder-val="{{ true }}">
-                <span style="display:inline-flex;align-items:center;min-height:34px;padding:6px 13px;border-radius:999px;line-height:1.25;background:#E7ECFB;color:#1F2F6B;font-size:15px;font-weight:700">{{ weekLabel }}</span>
+                <span style="display:inline-flex;align-items:center;min-height:34px;padding:6px 10px;border-radius:999px;line-height:1.25;background:#E7ECFB;color:#1F2F6B;font-size:13px;font-weight:700">{{ weekLabel }}</span>
               </sc-if>
             </div>
             <sc-if value="{{ hasMonth }}" hint-placeholder-val="{{ true }}">
@@ -114,8 +114,8 @@ input:focus,select:focus{outline:none;border-color:#3558D6 !important;background
             </div>
             <div style="display:grid;gap:12px">
               <sc-for list="{{ cobrar }}" as="c" hint-placeholder-count="3">
-                <article style="background:#fff;border-radius:24px;box-shadow:0 0 0 1px rgba(31,47,107,.05),0 2px 4px rgba(24,32,58,.04),0 18px 34px -18px rgba(31,47,107,.32);overflow:hidden;position:relative">
-                  <span style="position:absolute;left:0;top:16px;bottom:16px;width:4px;border-radius:0 4px 4px 0;background:{{ c.stripe }}"></span>
+                <article style="background:{{ c.cardBg }};border-radius:24px;box-shadow:0 0 0 1px rgba(31,47,107,.05),0 2px 4px rgba(24,32,58,.04),0 18px 34px -18px rgba(31,47,107,.32);overflow:hidden;position:relative">
+                  <span style="position:absolute;left:0;top:16px;bottom:16px;width:{{ c.stripeW }};border-radius:0 4px 4px 0;background:{{ c.stripe }}"></span>
                   <button onClick="{{ c.open }}" style="display:flex;align-items:center;gap:12px;width:100%;padding:16px 16px 12px 18px;background:none;border:0;text-align:left;cursor:pointer">
                     <span style="width:42px;height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;font:700 15px/1 'Bricolage Grotesque',sans-serif;background:{{ c.avBg }};color:{{ c.avFg }}">{{ c.ini }}</span>
                     <span style="flex:1;min-width:0;display:grid;gap:1px">
@@ -123,7 +123,7 @@ input:focus,select:focus{outline:none;border-color:#3558D6 !important;background
                       <span style="font-size:14px;color:#667090">{{ c.desc }}</span>
                       <span style="justify-self:start;margin-top:6px;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:700;background:{{ c.chipBg }};color:{{ c.chipFg }}">{{ c.chip }}</span>
                     </span>
-                    <span style="align-self:flex-start;padding-top:2px;font:800 20px/1.1 'Bricolage Grotesque',sans-serif;font-variant-numeric:tabular-nums">{{ c.amt }}</span>
+                    <span style="align-self:flex-start;padding-top:2px;font:800 20px/1.1 'Bricolage Grotesque',sans-serif;font-variant-numeric:tabular-nums;color:{{ c.amtColor }}">{{ c.amt }}</span>
                   </button>
                   <div style="display:grid;grid-template-columns:1fr auto;gap:8px;padding:0 16px 16px 18px">
                     <button onClick="{{ c.open }}" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:48px;padding:0 12px;border-radius:14px;border:0;background:#178553;color:#fff;font-weight:700;font-size:15.5px;cursor:pointer">
@@ -259,6 +259,14 @@ input:focus,select:focus{outline:none;border-color:#3558D6 !important;background
                   <select value="{{ set.pixTipo }}" onChange="{{ setPixTipo }}" style="width:100%;min-height:50px;padding:11px 14px;border-radius:14px;border:1.5px solid #E2E7F1;background:#F1F3F9;font-weight:400;font-size:17px"><option value="cpf">CPF ou CNPJ</option><option value="celular">Celular</option><option value="email">E-mail</option><option value="aleatoria">Chave aleatória</option></select>
                 </label>
                 <label style="display:grid;gap:6px;font-weight:700;font-size:15px">Chave<input value="{{ set.pixChave }}" onChange="{{ setPixChave }}" placeholder="Digite sua chave" style="width:100%;min-height:50px;padding:11px 14px;border-radius:14px;border:1.5px solid #E2E7F1;background:#F1F3F9;font-weight:400;font-size:17px"></label>
+                <div style="display:grid;gap:8px"><strong style="font-size:15px">Como enviar o Pix</strong>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                    <button onClick="{{ setEnvioLink }}" style="min-height:46px;border-radius:14px;border:0;font-weight:700;font-size:15px;cursor:pointer;background:{{ envioLink.bg }};color:{{ envioLink.fg }}">Uma mensagem com link</button>
+                    <button onClick="{{ setEnvioDuas }}" style="min-height:46px;border-radius:14px;border:0;font-weight:700;font-size:15px;cursor:pointer;background:{{ envioDuas.bg }};color:{{ envioDuas.fg }}">Duas mensagens</button>
+                  </div>
+                  <span style="font-size:14px;color:#667090">{{ envioDesc }}</span>
+                </div>
+                <label style="display:grid;gap:6px;font-weight:700;font-size:15px">Endereço da página de pagamento<input value="{{ set.linkBase }}" onChange="{{ setLinkBase }}" placeholder="https://ceeduardocar.github.io/caderninho/" inputmode="url" style="width:100%;min-height:50px;padding:11px 14px;border-radius:14px;border:1.5px solid #E2E7F1;background:#F1F3F9;font-weight:400;font-size:15px"></label>
                 <button onClick="{{ toggleCent }}" style="display:flex;align-items:center;gap:14px;background:none;border:0;padding:0;text-align:left;cursor:pointer">
                   <span style="flex:1;display:grid;gap:2px"><strong style="font-size:16px">Centavos de identificação</strong><span style="font-size:14px;color:#667090">Cada cobrança ganha centavos únicos (ex.: R$ 250,03) para achar quem pagou pelo extrato.</span></span>
                   <span style="width:52px;height:32px;border-radius:999px;position:relative;flex:none;transition:background .2s;background:{{ cent.track }}"><span style="position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s;transform:{{ cent.knob }}"></span></span>
@@ -282,13 +290,14 @@ input:focus,select:focus{outline:none;border-color:#3558D6 !important;background
               <button onClick="{{ wipe }}" style="min-height:48px;padding:0 18px;border-radius:14px;border:0;background:#FBE8E6;color:#BE3A30;font-weight:700;cursor:pointer">Apagar tudo</button>
             </div>
             <p style="margin:0;font-size:13px;color:#667090">Os dados ficam salvos só neste aparelho, neste navegador.</p>
+            <p style="margin:0;font-size:12px;color:#8A93AD">Versão 3 · link curto</p>
           </div>
         </sc-if>
       </div>
     </div>
 
     <sc-if value="{{ showFab }}" hint-placeholder-val="{{ true }}">
-      <button onClick="{{ fabGo }}" style="position:absolute;right:16px;bottom:106px;z-index:6;display:inline-flex;align-items:center;gap:8px;min-height:56px;padding:0 22px 0 16px;border-radius:20px;border:0;background:#FFE14D;color:#1F2F6B;font-weight:800;font-size:16px;box-shadow:0 0 0 2px #1F2F6B,0 14px 26px -8px rgba(31,47,107,.55);cursor:pointer" style-active="transform:scale(.96)">
+      <button onClick="{{ fabGo }}" style="position:absolute;right:16px;bottom:{{ fabBottom }};transition:bottom .25s;z-index:6;display:inline-flex;align-items:center;gap:8px;min-height:56px;padding:0 22px 0 16px;border-radius:20px;border:0;background:#FFE14D;color:#1F2F6B;font-weight:800;font-size:16px;box-shadow:0 0 0 2px #1F2F6B,0 14px 26px -8px rgba(31,47,107,.55);cursor:pointer" style-active="transform:scale(.96)">
         <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>{{ fabLabel }}
       </button>
     </sc-if>
@@ -329,8 +338,10 @@ input:focus,select:focus{outline:none;border-color:#3558D6 !important;background
             <sc-if value="{{ sh.c.isOpen }}" hint-placeholder-val="{{ true }}">
               <p style="margin:0 0 8px;font-size:14px;font-weight:700;color:#56648C">{{ sh.c.etapaNome }}</p>
               <div style="display:grid;gap:6px;padding:14px;border-radius:18px;background:#EFEAE2;margin-bottom:12px">
-                <p style="margin:0;justify-self:end;max-width:92%;padding:10px 12px;border-radius:14px 14px 4px 14px;background:#DDF5D3;white-space:pre-wrap;font-size:15px;line-height:1.45">{{ sh.c.msg }}</p>
+                <p style="margin:0;justify-self:end;max-width:92%;padding:10px 12px;border-radius:14px 14px 4px 14px;background:#DDF5D3;white-space:pre-wrap;overflow-wrap:anywhere;min-width:0;font-size:15px;line-height:1.45">{{ sh.c.msg }}</p>
+<sc-if value="{{ sh.c.duas }}" hint-placeholder-val="{{ false }}">
                 <p style="margin:0;justify-self:end;max-width:92%;padding:10px 12px;border-radius:14px 14px 4px 14px;background:#DDF5D3;font:12.5px/1.45 ui-monospace,Consolas,monospace;word-break:break-all">{{ sh.c.pix }}</p>
+                </sc-if>
               </div>
               <a href="{{ sh.c.waHref }}" target="_blank" rel="noopener" onClick="{{ sh.c.sent }}" style="display:flex;align-items:center;justify-content:center;gap:8px;min-height:56px;border-radius:16px;background:#178553;color:#fff;font-weight:700;font-size:18px;text-decoration:none">
                 <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"></path></svg>Enviar no WhatsApp</a>
@@ -425,6 +436,9 @@ const TPL={
   firme:"Olá, {nome}. O pagamento referente a {descricao}, no valor de {valor}, está em aberto desde {vencimento} ({dias} dias). Preciso que seja regularizado. Se estiver com alguma dificuldade, me avise para combinarmos.\n\n{instrucoes}"
 };
 const AVISO="Vou mandar o código Pix na próxima mensagem. É só tocar e segurar nele, escolher Copiar e colar no app do seu banco, na opção Pix copia e cola.";
+const INSTR_LINK="Para pagar, toque no link abaixo e depois em Copiar código Pix. Em seguida, cole no app do seu banco, na opção Pix copia e cola. Se preferir, a página também mostra o QR Code.\n{link}";
+const PAGE_DEFAULT='https://ceeduardocar.github.io/caderninho/';
+const b64url=s=>btoa(unescape(encodeURIComponent(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 const pad=n=>String(n).padStart(2,'0');
 const toStr=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const parseD=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);};
@@ -486,7 +500,7 @@ class Component extends DCLogic {
   }
   tick(){const d=new Date();this.setState({clock:`${pad(d.getHours())}:${pad(d.getMinutes())}`});}
   goTab(t){this.setState({tab:t,sheet:null});if(this.scrollRef.current)this.scrollRef.current.scrollTop=0;}
-  toast(msg,undo){clearTimeout(this.st);this.setState({snack:{msg,undo}});this.st=setTimeout(()=>this.setState({snack:null}),4200);}
+  toast(msg,undo){clearTimeout(this.st);this.setState({snack:{msg,undo}});this.st=setTimeout(()=>this.setState({snack:null}),undo?5000:2800);}
   cli(id){return this.state.clientes.find(c=>c.id===id);}
   info(c){
     if(c.status==='paga')return{etapa:'paga',label:`Paga em ${fmtD(c.pagaEm)}`,dias:0};
@@ -500,10 +514,18 @@ class Component extends DCLogic {
     let p=-2;for(const q of[-2,0,3,7])if(q<=d)p=q;if(d>=14)p=Math.floor(d/7)*7;
     const ponto=addDays(c.venc,p);const u=(c.contatos||[]).map(x=>x.data).sort().pop();return!u||u<ponto;
   }
-  msg(c){
+  modo(){return this.state.settings.envio==='duas'?'duas':'link';}
+  payLink(c,view){
+    const st=this.state.settings;const p=pixPayload(st,c.valor,c.id);if(!p)return'';
+    const base=(String(st.linkBase||'').trim()||PAGE_DEFAULT).split('#')[0];
+    if(view)return '🔗 '+base.replace(/^https?:\/\//,'').replace(/\/$/,'')+'/…';
+    return base+'#pagar='+b64url(JSON.stringify([pixKey(st),c.valor,c.id,st.nome,st.cidade,c.descricao,c.venc]));
+  }
+  msg(c,view){
     const cl=this.cli(c.clienteId)||{};const i=this.info(c);const et=i.etapa==='paga'?'hoje':i.etapa;
     const tem=!!pixPayload(this.state.settings,c.valor,c.id);
-    return TPL[et].replaceAll('{instrucoes}',tem?AVISO:'(cadastre sua chave Pix em Ajustes)').replaceAll('{nome}',first(cl.nome)).replaceAll('{valor}',money(c.valor)).replaceAll('{descricao}',c.descricao).replaceAll('{vencimento}',fmtDL(c.venc)).replaceAll('{dias}',Math.max(i.dias,0));
+    const instr=!tem?'(cadastre sua chave Pix em Ajustes)':this.modo()==='link'?INSTR_LINK.replace('{link}',this.payLink(c,view)):AVISO;
+    return TPL[et].replaceAll('{instrucoes}',instr).replaceAll('{nome}',first(cl.nome)).replaceAll('{valor}',money(c.valor)).replaceAll('{descricao}',c.descricao).replaceAll('{vencimento}',fmtDL(c.venc)).replaceAll('{dias}',Math.max(i.dias,0));
   }
   waNum(cl){let f=String((cl||{}).fone||'').replace(/\D/g,'');if(f&&!f.startsWith('55'))f='55'+f;return f;}
   updC(id,fn){this.setState(s=>({cobrancas:s.cobrancas.map(c=>c.id===id?fn(c):c)}));}
@@ -552,7 +574,7 @@ class Component extends DCLogic {
   item(c){
     const cl=this.cli(c.clienteId)||{nome:'Cliente removido'};const i=this.info(c);const st=ST[i.etapa];const a=AV[hashN(cl.nome)%6];
     return{id:c.id,nome:cl.nome,ini:ini(cl.nome),avBg:a[0],avFg:a[1],desc:c.descricao,sub:c.status==='paga'?c.descricao:`${c.descricao}, vence ${fmtD(c.venc)}`,
-      chip:i.label,chipBg:st[0],chipFg:st[1],stripe:st[2],amt:money(c.valor),
+      chip:i.label,chipBg:st[0],chipFg:st[1],stripe:st[2],amt:money(c.valor),late:i.dias>0&&c.status!=='paga',amtColor:i.dias>0&&c.status!=='paga'?'#BE3A30':'#18203A',cardBg:i.dias>0&&c.status!=='paga'?'linear-gradient(90deg,#FFF3F1 0,#fff 55%)':'#fff',stripeW:i.dias>0&&c.status!=='paga'?'6px':'4px',
       open:()=>this.setState({sheet:{t:'charge',id:c.id}}),paid:()=>this.markPaid(c.id)};
   }
   renderVals(){
@@ -602,7 +624,7 @@ class Component extends DCLogic {
       if(s.sheet.t==='charge'){const c=s.cobrancas.find(x=>x.id===s.sheet.id);if(c){sh.isCharge=true;const it=this.item(c);const cl=this.cli(c.clienteId)||{};const i=this.info(c);const open=c.status!=='paga';
         const pix=pixPayload(s.settings,c.valor,c.id);
         sh.c={...it,fone:fmtFone(cl.fone),isOpen:open,meta:`${c.descricao} · vence em ${fmtDL(c.venc)}`,etapaNome:open?`Mensagem: ${ETAPA[i.etapa==='paga'?'hoje':i.etapa].toLowerCase()}`:'',
-          msg:this.msg(c),pix:pix||'Cadastre sua chave Pix em Ajustes para gerar o código.',waHref:`https://wa.me/${this.waNum(cl)}?text=${encodeURIComponent(this.msg(c))}`,
+          msg:this.msg(c,true),duas:this.modo()==='duas'&&!!pix,pix:pix||'Cadastre sua chave Pix em Ajustes para gerar o código.',waHref:`https://wa.me/${this.waNum(cl)}?text=${encodeURIComponent(this.msg(c))}`,
           sent:()=>this.sent(c.id),copy:()=>this.copy(c.id),toggle:()=>{open?this.markPaid(c.id):this.reopen(c.id);},toggleLabel:open?'Recebi':'Reabrir',del:()=>this.del(c.id),
           hist:[...(c.contatos||[]).map(x=>`${fmtD(x.data)} · cobrança enviada (${ETAPA[x.etapa]?ETAPA[x.etapa].split(' (')[0].toLowerCase():x.etapa})`),...(c.pagaEm?[`${fmtD(c.pagaEm)} · pagamento recebido`]:[])],
           hasHist:(c.contatos||[]).length>0||!!c.pagaEm};}}
@@ -623,9 +645,9 @@ class Component extends DCLogic {
       clock:s.clock,scrollRef:this.scrollRef,isHoje:s.tab==='hoje',notHoje:s.tab!=='hoje',isCob:s.tab==='cobrancas',isCli:s.tab==='clientes',isMes:s.tab==='meses',isAju:s.tab==='ajustes',
       title:titles[s.tab],dateLabel:`${cap(DIAS[now.getDay()])}, ${now.getDate()} de ${MESES[now.getMonth()]}`,
       greeting:`${h<12?'Bom dia':h<18?'Boa tarde':'Boa noite'}${nome?', '+nome:''}!`,total:money(total),
-      hasLate:late.length>0,noLate:!late.length&&ab.length>0,lateLabel:`${late.length} ${plural(late.length,'atrasada','atrasadas')}, ${money(late.reduce((x,c)=>x+c.valor,0))}`,
+      hasLate:late.length>0,noLate:!late.length&&ab.length>0,lateLabel:`${late.length} ${plural(late.length,'atrasada','atrasadas')} · ${money(late.reduce((x,c)=>x+c.valor,0))}`,
       goLate:()=>{this.setState({filtro:'atrasadas'});this.goTab('cobrancas');},
-      hasWeek:week.length>0,weekLabel:`${week.length} ${plural(week.length,'vence','vencem')} nos próximos 7 dias`,
+      hasWeek:week.length>0,weekLabel:`${week.length} ${plural(week.length,'vence','vencem')} em 7 dias`,
       hasMonth:cob>0,monthPct:`${cob?Math.round(got/cob*100):0}%`,monthName:cap(MESES[now.getMonth()]),monthGot:money(got),monthAll:money(cob),
       showSetup:steps.some(x=>x.todo),steps,loadDemo:()=>this.loadDemo(),wipe:()=>this.wipe(),
       hasCharges:s.cobrancas.length>0,cobrar:cobrar.map(c=>this.item(c)),hasCobrar:cobrar.length>0,noCobrar:!cobrar.length,cobrarCount:String(cobrar.length),
@@ -635,10 +657,13 @@ class Component extends DCLogic {
       cliQ:s.cliQ,setCliQ:e=>this.setState({cliQ:e.target.value}),cliList,cliEmpty:!cliList.length,
       mes:{label:`${cap(MESES[md.getMonth()])} ${md.getFullYear()}`,dash:`${(mPct/100*251.3).toFixed(1)} 251.3`,pct:`${mPct}%`,got:money(mGot),open:money(mAll-mGot),late:money(mLate),list:ml.map(c=>this.item(c)),empty:!ml.length},
       prevMonth:()=>this.setState(x=>({mOff:x.mOff-1})),nextMonth:()=>this.setState(x=>({mOff:x.mOff+1})),
-      set:s.settings,setNome:setS('nome'),setCidade:setS('cidade'),setPixTipo:setS('pixTipo'),setPixChave:setS('pixChave'),
+      set:s.settings,setNome:setS('nome'),setCidade:setS('cidade'),setPixTipo:setS('pixTipo'),setPixChave:setS('pixChave'),setLinkBase:setS('linkBase'),
+      envioLink:{bg:s.settings.envio!=='duas'?'#1F2F6B':'#F1F3F9',fg:s.settings.envio!=='duas'?'#fff':'#1F2F6B'},envioDuas:{bg:s.settings.envio==='duas'?'#1F2F6B':'#F1F3F9',fg:s.settings.envio==='duas'?'#fff':'#1F2F6B'},
+      setEnvioLink:()=>this.setState(x=>({settings:{...x.settings,envio:'link'}})),setEnvioDuas:()=>this.setState(x=>({settings:{...x.settings,envio:'duas'}})),
+      envioDesc:s.settings.envio==='duas'?'Primeiro o texto, depois o código sozinho para copiar.':'Um toque envia tudo. O cliente abre o link e copia o código com um botão, ou lê o QR Code.',
       toggleCent:()=>this.setState(x=>({settings:{...x.settings,centavos:!x.settings.centavos}})),cent:{track:s.settings.centavos?'#15774A':'#E2E7F1',knob:s.settings.centavos?'translateX(20px)':'none'},
       regua:[['lembrete','2 dias antes','Lembrete gentil'],['hoje','No dia','Aviso de vencimento'],['atraso','3 dias depois','Atraso leve'],['firme','7 dias depois','Atraso firme, repete a cada 7 dias']].map(([e,quando,nome])=>({quando,nome,bg:ST[e][0],fg:ST[e][1]})),
-      showFab:['hoje','cobrancas','clientes'].includes(s.tab)&&!s.sheet,fabLabel:s.tab==='clientes'?'Novo cliente':'Nova cobrança',
+      fabBottom:s.snack?'176px':'106px',showFab:['hoje','cobrancas','clientes'].includes(s.tab)&&!s.sheet,fabLabel:s.tab==='clientes'?'Novo cliente':'Nova cobrança',
       fabGo:()=>s.tab==='clientes'?this.openNewClient():this.openNewCharge(),
       nav,snack:{on:!!s.snack,msg:s.snack?s.snack.msg:'',canUndo:!!(s.snack&&s.snack.undo),undo:()=>s.snack&&s.snack.undo&&s.snack.undo()},
       sheetOn:!!s.sheet,closeSheet:()=>this.setState({sheet:null}),sh,
