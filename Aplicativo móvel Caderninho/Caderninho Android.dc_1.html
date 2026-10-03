@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Caderninho</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#F1F3F9">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<script src="./support.js"></script>
+<script>if('serviceWorker' in navigator&&location.protocol.startsWith('http'))addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));</script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:radial-gradient(900px 520px at 15% 8%,#FFF1A8 0,transparent 60%),radial-gradient(800px 600px at 92% 92%,#BFCBF4 0,transparent 60%),#E3E7F2;background-attachment:fixed;font-family:'Atkinson Hyperlegible',system-ui,sans-serif;color:#18203A;-webkit-font-smoothing:antialiased}
+a{color:#1F2F6B}a:hover{color:#3558D6}
+button,input,select{font:inherit;color:inherit}
+input:focus,select:focus{outline:none;border-color:#3558D6 !important;background:#fff !important}
+*{box-sizing:border-box}
+</style>
+</helmet>
+<div style="{{ outerStyle }}">
+<sc-if value="{{ showChrome }}" hint-placeholder-val="{{ true }}">
+
+  <div style="max-width:300px;display:flex;flex-direction:column;gap:14px">
+    <div style="display:flex;align-items:center;gap:10px;font:800 22px/1 'Bricolage Grotesque',sans-serif;color:#1F2F6B">
+      <svg viewBox="0 0 28 28" width="30" height="30"><rect x="5" y="3" width="18" height="22" rx="3.5" fill="#FFE14D"></rect><rect x="5" y="3" width="18" height="22" rx="3.5" fill="none" stroke="#1F2F6B" stroke-width="2"></rect><path d="M10 10h8M10 14h8M10 18h5" stroke="#1F2F6B" stroke-width="2" stroke-linecap="round"></path><path d="M5 8H3M5 14H3M5 20H3" stroke="#1F2F6B" stroke-width="2" stroke-linecap="round"></path></svg>
+      Caderninho · Android
+    </div>
+    <p style="margin:0;font-size:15px;line-height:1.5;color:#56648C;text-wrap:pretty">Versão de teste do app web, adaptada aos padrões Android: barra superior, navegação inferior com indicador, botão flutuante, painéis inferiores e snackbar com "Desfazer".</p>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:14px;color:#56648C;line-height:1.45">
+      <div style="display:flex;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#FFE14D;margin-top:6px;flex:none;box-shadow:0 0 0 1.5px #1F2F6B"></span><span>Mesma identidade: marca-texto amarelo, azul tinta, Bricolage + Atkinson.</span></div>
+      <div style="display:flex;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#178553;margin-top:6px;flex:none"></span><span>Cobrar no WhatsApp agora mostra a mensagem antes de enviar.</span></div>
+      <div style="display:flex;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#BE3A30;margin-top:6px;flex:none"></span><span>Tudo funciona: marcar recebido, criar cliente e cobrança, buscar Pix pelo valor, meses, ajustes.</span></div>
+    </div>
+  </div></sc-if>
+
+  <div style="{{ frameStyle }}">
+
+    <sc-if value="{{ showChrome }}" hint-placeholder-val="{{ true }}">
+    <div style="height:34px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:14px;font-weight:700;color:#18203A;position:relative">
+      <span>{{ clock }}</span>
+      <span style="position:absolute;left:50%;top:9px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#111318"></span>
+      <span style="display:flex;align-items:center;gap:6px;font-size:12px"><span>5G</span><span style="width:22px;height:11px;border-radius:3px;border:1.5px solid #18203A;padding:1px;display:flex"><span style="width:70%;background:#18203A;border-radius:1px"></span></span></span>
+    </div>
+    </sc-if>
+
+    <div style="flex:1;overflow-y:auto;overflow-x:hidden;position:relative" ref="{{ scrollRef }}">
+      <div style="position:sticky;top:0;z-index:5;background:rgba(238,241,251,.82);backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px;padding:6px 16px 6px 20px">
+        <sc-if value="{{ isHoje }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;align-items:center;gap:8px;font:800 21px/1 'Bricolage Grotesque',sans-serif;color:#1F2F6B;letter-spacing:-.01em">
+            <svg viewBox="0 0 28 28" width="26" height="26"><rect x="5" y="3" width="18" height="22" rx="3.5" fill="#FFE14D"></rect><rect x="5" y="3" width="18" height="22" rx="3.5" fill="none" stroke="#1F2F6B" stroke-width="2"></rect><path d="M10 10h8M10 14h8M10 18h5" stroke="#1F2F6B" stroke-width="2" stroke-linecap="round"></path><path d="M5 8H3M5 14H3M5 20H3" stroke="#1F2F6B" stroke-width="2" stroke-linecap="round"></path></svg>Caderninho
+          </div>
+          <span style="font-size:14px;color:#667090">{{ dateLabel }}</span>
+        </sc-if>
+        <sc-if value="{{ notHoje }}" hint-placeholder-val="{{ false }}">
+          <h1 style="margin:0;font:800 26px/1.1 'Bricolage Grotesque',sans-serif;color:#1F2F6B;letter-spacing:-.02em">{{ title }}</h1>
+        </sc-if>
+      </div>
+
+      <div style="padding:4px 16px 120px">
+
+        <sc-if value="{{ isHoje }}" hint-placeholder-val="{{ true }}">
+          <section style="position:relative;overflow:hidden;padding:22px 22px 20px;background:radial-gradient(420px 220px at 100% 0,rgba(255,225,77,.22),transparent 65%),linear-gradient(155deg,#2A3F8F 0%,#1F2F6B 55%,#16224F 100%);border-radius:30px;box-shadow:0 22px 40px -18px rgba(31,47,107,.7),inset 0 1px 0 rgba(255,255,255,.12)">
+            <p style="margin:0;color:#C9D3F5;font-size:16px">{{ greeting }}</p>
+            <p style="margin:12px 0 2px;font-weight:700;color:#FFE14D;font-size:13px;letter-spacing:.08em;text-transform:uppercase">Para receber</p>
+            <p style="margin:0 0 14px;font:800 50px/1.05 'Bricolage Grotesque',sans-serif;color:#fff;letter-spacing:-.035em;font-variant-numeric:tabular-nums"><span style="background-image:linear-gradient(100deg,transparent 0 1%,#FFE14D 3% 97%,transparent 99%);background-repeat:no-repeat;background-size:100% 7px;background-position:0 94%;padding:0 .08em;margin:0 -.08em">{{ total }}</span></p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <sc-if value="{{ hasLate }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ goLate }}" style="display:inline-flex;align-items:center;min-height:34px;padding:6px 13px;border-radius:999px;line-height:1.25;background:#FBE8E6;color:#BE3A30;font-size:15px;font-weight:700;border:0;cursor:pointer">{{ lateLabel }}</button>
+              </sc-if>
+              <sc-if value="{{ noLate }}" hint-placeholder-val="{{ false }}">
+                <span style="display:inline-flex;align-items:center;min-height:34px;padding:6px 13px;border-radius:999px;line-height:1.25;background:#E2F3E9;color:#15774A;font-size:15px;font-weight:700">Nada em atraso</span>
+              </sc-if>
+              <sc-if value="{{ hasWeek }}" hint-placeholder-val="{{ true }}">
+                <span style="display:inline-flex;align-items:center;min-height:34px;padding:6px 13px;border-radius:999px;line-height:1.25;background:#E7ECFB;color:#1F2F6B;font-size:15px;font-weight:700">{{ weekLabel }}</span>
+              </sc-if>
+            </div>
+            <sc-if value="{{ hasMonth }}" hint-placeholder-val="{{ true }}">
+              <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.16)">
+                <div style="height:10px;border-radius:999px;background:rgba(255,255,255,.16);overflow:hidden"><div style="height:100%;background:#FFE14D;border-radius:999px;width:{{ monthPct }};transition:width .5s"></div></div>
+                <p style="margin:8px 0 0;font-size:15px;color:#C9D3F5">{{ monthName }}: <strong style="color:#fff">{{ monthGot }}</strong> recebidos de {{ monthAll }}</p>
+              </div>
+            </sc-if>
+          </section>
+
+          <sc-if value="{{ showSetup }}" hint-placeholder-val="{{ false }}">
+            <section style="margin-top:16px;padding:18px;background:#fff;border-radius:24px;box-shadow:0 0 0 1px rgba(31,47,107,.05),0 2px 4px rgba(24,32,58,.04),0 18px 34px -18px rgba(31,47,107,.32)">
+              <h2 style="margin:0;font:800 20px/1.2 'Bricolage Grotesque',sans-serif;color:#1F2F6B;letter-spacing:-.015em">Primeiros passos</h2>
+              <div style="display:grid;gap:1px;background:#E2E7F1;margin-top:10px">
+                <sc-for list="{{ steps }}" as="st" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;gap:12px;padding:11px 0;background:#fff">
+                    <span style="width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;font-weight:700;background:{{ st.nBg }};color:{{ st.nFg }}">{{ st.n }}</span>
+                    <span style="flex:1;min-width:0;display:grid"><strong style="text-decoration:{{ st.deco }};color:{{ st.tColor }}">{{ st.t }}</strong><span style="font-size:14px;color:#667090">{{ st.d }}</span></span>
+                    <sc-if value="{{ st.todo }}" hint-placeholder-val="{{ true }}"><button onClick="{{ st.go }}" style="min-height:38px;padding:0 14px;font-size:15px;border-radius:12px;border:0;background:#E7ECFB;color:#1F2F6B;font-weight:700;cursor:pointer">{{ st.b }}</button></sc-if>
+                  </div>
+                </sc-for>
+              </div>
+              <button onClick="{{ loadDemo }}" style="margin-top:8px;background:none;border:0;padding:6px 0;color:#1F2F6B;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer">Prefiro ver com dados de exemplo</button>
+            </section>
+          </sc-if>
+
+          <sc-if value="{{ hasCharges }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;align-items:center;gap:8px;margin:26px 0 12px">
+              <h2 style="margin:0;font:800 20px/1.2 'Bricolage Grotesque',sans-serif;color:#1F2F6B;letter-spacing:-.015em">Cobrar hoje</h2>
+              <sc-if value="{{ hasCobrar }}" hint-placeholder-val="{{ true }}"><span style="min-width:26px;height:26px;padding:0 8px;border-radius:999px;background:#1F2F6B;color:#fff;font-weight:700;font-size:14px;display:inline-flex;align-items:center;justify-content:center">{{ cobrarCount }}</span></sc-if>
+            </div>
+            <div style="display:grid;gap:12px">
+              <sc-for list="{{ cobrar }}" as="c" hint-placeholder-count="3">
+                <article style="background:#fff;border-radius:24px;box-shadow:0 0 0 1px rgba(31,47,107,.05),0 2px 4px rgba(24,32,58,.04),0 18px 34px -18px rgba(31,47,107,.32);overflow:hidden;position:relative">
+                  <span style="position:absolute;left:0;top:16px;bottom:16px;width:4px;border-radius:0 4px 4px 0;background:{{ c.stripe }}"></span>
+                  <button onClick="{{ c.open }}" style="display:flex;align-items:center;gap:12px;width:100%;padding:16px 16px 12px 18px;background:none;border:0;text-align:left;cursor:pointer">
+                    <span style="width:42px;height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;font:700 15px/1 'Bricolage Grotesque',sans-serif;background:{{ c.avBg }};color:{{ c.avFg }}">{{ c.ini }}</span>
+                    <span style="flex:1;min-width:0;display:grid;gap:1px">
+                      <span style="font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ c.nome }}</span>
+                      <span style="font-size:14px;color:#667090">{{ c.desc }}</span>
+                      <span style="justify-self:start;margin-top:6px;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:700;background:{{ c.chipBg }};color:{{ c.chipFg }}">{{ c.chip }}</span>
+                    </span>
+                    <span style="align-self:flex-start;padding-top:2px;font:800 20px/1.1 'Bricolage Grotesque',sans-serif;font-variant-numeric:tabular-nums">{{ c.amt }}</span>
+                  </button>
+                  <div style="display:grid;grid-template-columns:1fr auto;gap:8px;padding:0 16px 16px 18px">
+                    <button onClick="{{ c.open }}" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:48px;padding:0 12px;border-radius:14px;border:0;background:#178553;color:#fff;font-weight:700;font-size:15.5px;cursor:pointer">
+                      <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.700 6.700 0 0 1-3.300-2.900c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a.9.9 0 0 0-.7.3 2.8 2.8 0 0 0-.9 2.1 4.9 4.9 0 0 0 1 2.6 11.2 11.2 0 0 0 4.3 3.8c1.6.7 2.2.7 3 .6a2.500 2.500 0 0 0 1.700-1.200 2 2 0 0 0 .1-1.2c0-.1-.2-.2-.4-.3z"></path></svg>Cobrar no WhatsApp</button>
+                    <button onClick="{{ c.paid }}" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:48px;padding:0 14px;border-radius:14px;border:0;background:#E2F3E9;color:#15774A;font-weight:700;font-size:15.5px;cursor:pointer">
+                      <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>Recebi</button>
+                  </div>
+                </article>
+              </sc-for>
+              <sc-if value="{{ noCobrar }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:26px 20px;text-align:center;background:#fff;border-radius:24px;box-shadow:0 0 0 1px rgba(31,47,107,.05),0 2px 4px rgba(24,32,58,.04),0 18px 34px -18px rgba(31,47,107,.32)">
+                  <div style="width:52px;height:52px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;background:#E2F3E9;color:#15774A"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></div>
+                  <p style="margin:0;color:#667090;font-size:15px"><strong style="display:block;color:#18203A;font-size:17px;margin-bottom:4px">Tudo em dia por hoje</strong>As cobranças aparecem aqui 2 dias antes do vencimento, no dia e quando atrasam.</p>
+                </div>
+              </sc-if>
+            </div>
+
+            <div style="margin-top:26px">
+              <label style="display:block;font-weight:700;color:#1F2F6B;margin-bottom:8px">Recebeu um Pix? Ache quem pagou pelo valor</label>
+              <div style="display:flex;align-items:center;gap:10px;padding:0 14px;background:#fff;border-radius:16px;box-shadow:0 0 0 1px rgba(31,47,107,.05),0 2px 4px rgba(24,32,58,.04),0 18px 34px -18px rgba(31,47,107,.32)">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#667090" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4 4"></path></svg>
+                <input value="{{ busca }}" onChange="{{ setBusca }}" inputmode="decimal" placeholder="Ex.: 250,03" style="border:0 !important;background:none !important;min-height:52px;padding:0;flex:1;font-size:18px;font-variant-numeric:tabular-nums;width:100%">
+              </div>
+              <div style="margin-top:10px;display:grid;gap:8px">
+                <sc-if value="{{ buscaNada }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:14px;color:#667090">{{ buscaMsg }}</p></sc-if>
+                <sc-for list="{{ buscaRes }}" as="c" hint-placeholder-count="0">
+                  <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fff;border-radius:16px;box-shadow:0 1px 2px rgba(24,32,58,.05)">
+                    <span style="width:42px;height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;font:700 15px/1 'Bricolage Grotesque',sans-serif;background:{{ c.avBg }};color:{{ c.avFg }}">{{ c.ini }}</span>
+                    <span style="flex:1;min-width:0;display:grid"><span style="font-weight:700">{{ c.nome }}</span><span style="font-size:14px;color:#667090">{{ c.amt }} · {{ c.desc }}</span></span>
+                    <button onClick="{{ c.paid }}" style="min-height:40px;padding:0 14px;border-radius:12px;border:0;background:#E2F3E9;color:#15774A;font-weight:700;cursor:pointer">Recebi</button>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <sc-if value="{{ hasProx }}" hint-placeholder-val="{{ true }}">
+              <h2 style="margin:28px 0 12px;font:800 20px/1.2 'Bricolage Grotesque',sans-serif;color:#1F2F6B;letter-spacing:-.015em">Próximos 7 dias</h2>
+              <div style="display:grid;gap:1px;background:#E2E7F1;border-radius:24px;overflow:hidden;box-shadow:0 0 0 1px rgba(31,47,107,.05),0 2px 4px rgba(24,32,58,.04),0 18px 34px -18px rgba(31,47,107,.32)">
+                <sc-for list="{{ prox }}" as="c" hint-placeholder-count="2">
+                  <button onClick="{{ c.open }}" style="display:flex;align-items:center;gap:12px;width:100%;padding:13px 16px;background:#fff;border:0;text-align:left;cursor:pointer" style-active="background:#EEF1FB">
+                    <span style="width:42px;height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;font:700 15px/1 'Bricolage Grotesque',sans-serif;background:{{ c.avBg }};color:{{ c.avFg }}">{{ c.ini }}</span>
+                    <span style="flex:1;min-width:0;display:grid;gap:1px"><span style="font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ c.nome }}</span><span style="font-size:14px;color:#667090">{{ c.sub }}</span><span style="justify-self:start;margin-top:6px;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:700;background:{{ c.chipBg }};color:{{ c.chipFg }}">{{ c.chip }}</span></span>
+                    <span style="align-self:flex-start;padding-top:2px;font:700 17px/1.1 'Bricolage Grotesque',sans-serif;font-variant-numeric:tabular-nums">{{ c.amt }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-if>
+          </sc-if>
+        </sc-if>
+
+        <sc-if value="{{ isCob }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:8px;overflow-x:auto;padding:4px 0 2px;margin:0 -16px;padding-left:16px;padding-right:16px">
+            <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
+              <button onClick="{{ f.pick }}" style="flex:none;display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 16px;border-radius:999px;font-weight:700;font-size:15px;cursor:pointer;background:{{ f.bg }};color:{{ f.fg }};border:1.5px solid {{ f.bd }}">{{ f.label }}<span style="font-size:13px;opacity:.75">{{ f.n }}</span></button>
+            </sc-for>
+          </div>
+          <p style="margin:14px 2px 10px;font-size:15px;color:#667090">{{ filterSum }}</p>
+          <div style="display:grid;gap:1px;background:#E2E7F1;border-radius:24px;overflow:hidden;box-shadow:0 0 0 1px rgba(31,47,107,.05),0 2px 4px rgba(24,32,58,.04),0 18px 34px -18px rgba(31,47,107,.32)">
+            <sc-for list="{{ cobList }}" as="c" hint-placeholder-count="5">
+              <button onClick="{{ c.open }}" style="display:flex;align-items:center;gap:12px;width:100%;padding:13px 16px;background:#fff;border:0;text-align:left;cursor:pointer" style-active="background:#EEF1FB">
+                <span style="width:42px;height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;font:700 15px/1 'Bricolage Grotesque',sans-serif;background:{{ c.avBg }};color:{{ c.avFg }}">{{ c.ini }}</span>
+                <span style="flex:1;min-width:0;display:grid;gap:1px"><span style="font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ c.nome }}</span><span style="font-size:14px;color:#667090">{{ c.sub }}</span><span style="justify-self:start;margin-top:6px;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:700;background:{{ c.chipBg }};color:{{ c.chipFg }}">{{ c.chip }}</span></span>
+                <span style="align-self:flex-start;padding-top:2px;font:700 17px/1.1 'Bricolage Grotesque',sans-serif;font-variant-numeric:tabular-nums">{{ c.amt }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <sc-if value="{{ cobEmpty }}" hint-placeholder-val="{{ false }}">
+            <p style="margin:0;padding:28px 20px;text-align:center;background:#fff;border-radius:24px;color:#667090">Nada por aqui.</p>
+          </sc-if>
+        </sc-if>
+
+        <sc-if value="{{ isCli }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:10px;padding:0 16px;background:#E7ECFB;border-radius:999px;margin-bottom:14px">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#56648C" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4 4"></path></svg>
+            <input value="{{ cliQ }}" onChange="{{ setCliQ }}" placeholder="Buscar cliente" style="border:0 !important;background:none !important;min-height:50px;padding:0;flex:1;font-size:17px;width:100%">
+          </div>
+          <div style="display:grid;gap:1px;background:#E2E7F1;border-radius:24px;overflow:hidden;box-shadow:0 0 0 1px rgba(31,47,107,.05),0 2px 4px rgba(24,32,58,.04),0 18px 34px -18px rgba(31,47,107,.32)">
+            <sc-for list="{{ cliList }}" as="k" hint-placeholder-count="5">
+              <button onClick="{{ k.open }}" style="display:flex;align-items:center;gap:12px;width:100%;padding:13px 16px;background:#fff;border:0;text-align:left;cursor:pointer" style-active="background:#EEF1FB">
+                <span style="width:42px;height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;font:700 15px/1 'Bricolage Grotesque',sans-serif;background:{{ k.avBg }};color:{{ k.avFg }}">{{ k.ini }}</span>
+                <span style="flex:1;min-width:0;display:grid;gap:1px"><span style="font-weight:700">{{ k.nome }}</span><span style="font-size:14px;color:#667090">{{ k.sub }}</span></span>
+                <span style="display:grid;justify-items:end;gap:2px"><span style="font:700 17px/1.1 'Bricolage Grotesque',sans-serif;font-variant-numeric:tabular-nums;color:{{ k.amtColor }}">{{ k.amt }}</span><span style="font-size:13px;color:#667090">{{ k.state }}</span></span>
+              </button>
+            </sc-for>
+          </div>
+          <sc-if value="{{ cliEmpty }}" hint-placeholder-val="{{ false }}">
+            <p style="margin:0;padding:28px 20px;text-align:center;background:#fff;border-radius:24px;color:#667090">Nenhum cliente encontrado.</p>
+          </sc-if>
+        </sc-if>
+
+        <sc-if value="{{ isMes }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin:6px 0 14px">
+            <button onClick="{{ prevMonth }}" aria-label="Mês anterior" style="width:44px;height:44px;border-radius:50%;border:0;background:#fff;box-shadow:0 1px 3px rgba(24,32,58,.12);color:#1F2F6B;display:inline-flex;align-items:center;justify-content:center;cursor:pointer"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"></path></svg></button>
+            <h2 style="margin:0;font:700 22px/1.2 'Bricolage Grotesque',sans-serif;color:#1F2F6B">{{ mes.label }}</h2>
+            <button onClick="{{ nextMonth }}" aria-label="Próximo mês" style="width:44px;height:44px;border-radius:50%;border:0;background:#fff;box-shadow:0 1px 3px rgba(24,32,58,.12);color:#1F2F6B;display:inline-flex;align-items:center;justify-content:center;cursor:pointer"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5l7 7-7 7"></path></svg></button>
+          </div>
+          <div style="display:flex;align-items:center;gap:18px;padding:18px;background:#fff;border-radius:24px;box-shadow:0 0 0 1px rgba(31,47,107,.05),0 2px 4px rgba(24,32,58,.04),0 18px 34px -18px rgba(31,47,107,.32)">
+            <svg viewBox="0 0 96 96" width="96" height="96" style="flex:none"><circle cx="48" cy="48" r="40" fill="none" stroke="#E2E7F1" stroke-width="8"></circle><circle cx="48" cy="48" r="40" fill="none" stroke="#15774A" stroke-width="8" stroke-linecap="round" stroke-dasharray="{{ mes.dash }}" transform="rotate(-90 48 48)"></circle><text x="48" y="54" text-anchor="middle" style="font:800 17px 'Bricolage Grotesque',sans-serif;fill:#18203A">{{ mes.pct }}</text></svg>
+            <div style="flex:1;min-width:0;display:grid;gap:7px">
+              <div style="display:flex;justify-content:space-between;gap:8px"><span style="color:#667090;font-size:15px">Recebido</span><strong style="font:700 16px 'Bricolage Grotesque',sans-serif;color:#15774A">{{ mes.got }}</strong></div>
+              <div style="display:flex;justify-content:space-between;gap:8px"><span style="color:#667090;font-size:15px">A receber</span><strong style="font:700 16px 'Bricolage Grotesque',sans-serif">{{ mes.open }}</strong></div>
+              <div style="display:flex;justify-content:space-between;gap:8px"><span style="color:#667090;font-size:15px">Atrasado</span><strong style="font:700 16px 'Bricolage Grotesque',sans-serif;color:#BE3A30">{{ mes.late }}</strong></div>
+            </div>
+          </div>
+          <h2 style="margin:26px 0 12px;font:800 20px/1.2 'Bricolage Grotesque',sans-serif;color:#1F2F6B;letter-spacing:-.015em">Cobranças do mês</h2>
+          <div style="display:grid;gap:1px;background:#E2E7F1;border-radius:24px;overflow:hidden;box-shadow:0 0 0 1px rgba(31,47,107,.05),0 2px 4px rgba(24,32,58,.04),0 18px 34px -18px rgba(31,47,107,.32)">
+            <sc-for list="{{ mes.list }}" as="c" hint-placeholder-count="4">
+              <button onClick="{{ c.open }}" style="display:flex;align-items:center;gap:12px;width:100%;padding:13px 16px;background:#fff;border:0;text-align:left;cursor:pointer" style-active="background:#EEF1FB">
+                <span style="width:42px;height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;font:700 15px/1 'Bricolage Grotesque',sans-serif;background:{{ c.avBg }};color:{{ c.avFg }}">{{ c.ini }}</span>
+                <span style="flex:1;min-width:0;display:grid;gap:1px"><span style="font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ c.nome }}</span><span style="font-size:14px;color:#667090">{{ c.sub }}</span><span style="justify-self:start;margin-top:6px;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:700;background:{{ c.chipBg }};color:{{ c.chipFg }}">{{ c.chip }}</span></span>
+                <span style="align-self:flex-start;padding-top:2px;font:700 17px/1.1 'Bricolage Grotesque',sans-serif;font-variant-numeric:tabular-nums">{{ c.amt }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <sc-if value="{{ mes.empty }}" hint-placeholder-val="{{ false }}">
+            <p style="margin:0;padding:28px 20px;text-align:center;background:#fff;border-radius:24px;color:#667090">Nenhuma cobrança neste mês.</p>
+          </sc-if>
+        </sc-if>
+
+        <sc-if value="{{ isAju }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;gap:22px">
+            <div style="display:grid;gap:10px">
+              <h2 style="margin:0;font:800 20px/1.2 'Bricolage Grotesque',sans-serif;color:#1F2F6B;letter-spacing:-.015em">Seus dados</h2>
+              <div style="display:grid;gap:14px;padding:18px;background:#fff;border-radius:24px;box-shadow:0 0 0 1px rgba(31,47,107,.05),0 2px 4px rgba(24,32,58,.04),0 18px 34px -18px rgba(31,47,107,.32)">
+                <label style="display:grid;gap:6px;font-weight:700;font-size:15px">Seu nome ou do negócio<input value="{{ set.nome }}" onChange="{{ setNome }}" style="width:100%;min-height:50px;padding:11px 14px;border-radius:14px;border:1.5px solid #E2E7F1;background:#F1F3F9;font-weight:400;font-size:17px"></label>
+                <label style="display:grid;gap:6px;font-weight:700;font-size:15px">Cidade<input value="{{ set.cidade }}" onChange="{{ setCidade }}" style="width:100%;min-height:50px;padding:11px 14px;border-radius:14px;border:1.5px solid #E2E7F1;background:#F1F3F9;font-weight:400;font-size:17px"></label>
+              </div>
+            </div>
+            <div style="display:grid;gap:10px">
+              <h2 style="margin:0;font:800 20px/1.2 'Bricolage Grotesque',sans-serif;color:#1F2F6B;letter-spacing:-.015em">Chave Pix</h2>
+              <div style="display:grid;gap:14px;padding:18px;background:#fff;border-radius:24px;box-shadow:0 0 0 1px rgba(31,47,107,.05),0 2px 4px rgba(24,32,58,.04),0 18px 34px -18px rgba(31,47,107,.32)">
+                <label style="display:grid;gap:6px;font-weight:700;font-size:15px">Tipo
+                  <select value="{{ set.pixTipo }}" onChange="{{ setPixTipo }}" style="width:100%;min-height:50px;padding:11px 14px;border-radius:14px;border:1.5px solid #E2E7F1;background:#F1F3F9;font-weight:400;font-size:17px"><option value="cpf">CPF ou CNPJ</option><option value="celular">Celular</option><option value="email">E-mail</option><option value="aleatoria">Chave aleatória</option></select>
+                </label>
+                <label style="display:grid;gap:6px;font-weight:700;font-size:15px">Chave<input value="{{ set.pixChave }}" onChange="{{ setPixChave }}" placeholder="Digite sua chave" style="width:100%;min-height:50px;padding:11px 14px;border-radius:14px;border:1.5px solid #E2E7F1;background:#F1F3F9;font-weight:400;font-size:17px"></label>
+                <div style="display:grid;gap:8px"><strong style="font-size:15px">Como enviar o Pix</strong>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                    <button onClick="{{ setEnvioLink }}" style="min-height:46px;border-radius:14px;border:0;font-weight:700;font-size:15px;cursor:pointer;background:{{ envioLink.bg }};color:{{ envioLink.fg }}">Uma mensagem com link</button>
+                    <button onClick="{{ setEnvioDuas }}" style="min-height:46px;border-radius:14px;border:0;font-weight:700;font-size:15px;cursor:pointer;background:{{ envioDuas.bg }};color:{{ envioDuas.fg }}">Duas mensagens</button>
+                  </div>
+                  <span style="font-size:14px;color:#667090">{{ envioDesc }}</span>
+                </div>
+                <label style="display:grid;gap:6px;font-weight:700;font-size:15px">Endereço da página de pagamento<input value="{{ set.linkBase }}" onChange="{{ setLinkBase }}" placeholder="https://ceeduardocar.github.io/caderninho/" inputmode="url" style="width:100%;min-height:50px;padding:11px 14px;border-radius:14px;border:1.5px solid #E2E7F1;background:#F1F3F9;font-weight:400;font-size:15px"></label>
+                <button onClick="{{ toggleCent }}" style="display:flex;align-items:center;gap:14px;background:none;border:0;padding:0;text-align:left;cursor:pointer">
+                  <span style="flex:1;display:grid;gap:2px"><strong style="font-size:16px">Centavos de identificação</strong><span style="font-size:14px;color:#667090">Cada cobrança ganha centavos únicos (ex.: R$ 250,03) para achar quem pagou pelo extrato.</span></span>
+                  <span style="width:52px;height:32px;border-radius:999px;position:relative;flex:none;transition:background .2s;background:{{ cent.track }}"><span style="position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s;transform:{{ cent.knob }}"></span></span>
+                </button>
+              </div>
+            </div>
+            <div style="display:grid;gap:10px">
+              <h2 style="margin:0;font:800 20px/1.2 'Bricolage Grotesque',sans-serif;color:#1F2F6B;letter-spacing:-.015em">Régua de cobrança</h2>
+              <p style="margin:-4px 0 0;color:#667090;font-size:15px">Quando cada cobrança aparece em "Cobrar hoje".</p>
+              <div style="display:grid;gap:1px;background:#E2E7F1;border-radius:24px;overflow:hidden;box-shadow:0 0 0 1px rgba(31,47,107,.05),0 2px 4px rgba(24,32,58,.04),0 18px 34px -18px rgba(31,47,107,.32)">
+                <sc-for list="{{ regua }}" as="r" hint-placeholder-count="4">
+                  <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff">
+                    <span style="padding:3px 10px;border-radius:999px;font-size:13px;font-weight:700;flex:none;background:{{ r.bg }};color:{{ r.fg }}">{{ r.quando }}</span>
+                    <span style="font-size:15px">{{ r.nome }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:10px">
+              <button onClick="{{ loadDemo }}" style="min-height:48px;padding:0 18px;border-radius:14px;border:0;background:#E7ECFB;color:#1F2F6B;font-weight:700;cursor:pointer">Carregar exemplo</button>
+              <button onClick="{{ wipe }}" style="min-height:48px;padding:0 18px;border-radius:14px;border:0;background:#FBE8E6;color:#BE3A30;font-weight:700;cursor:pointer">Apagar tudo</button>
+            </div>
+            <p style="margin:0;font-size:13px;color:#667090">Os dados ficam salvos só neste aparelho, neste navegador.</p>
+            <p style="margin:0;font-size:12px;color:#8A93AD">Versão 2 · envio com link</p>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+
+    <sc-if value="{{ showFab }}" hint-placeholder-val="{{ true }}">
+      <button onClick="{{ fabGo }}" style="position:absolute;right:16px;bottom:106px;z-index:6;display:inline-flex;align-items:center;gap:8px;min-height:56px;padding:0 22px 0 16px;border-radius:20px;border:0;background:#FFE14D;color:#1F2F6B;font-weight:800;font-size:16px;box-shadow:0 0 0 2px #1F2F6B,0 14px 26px -8px rgba(31,47,107,.55);cursor:pointer" style-active="transform:scale(.96)">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>{{ fabLabel }}
+      </button>
+    </sc-if>
+
+    <nav style="flex:none;margin:0 12px 8px;border-radius:30px;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);box-shadow:0 0 0 1px rgba(31,47,107,.06),0 16px 32px -10px rgba(31,47,107,.38);display:grid;grid-template-columns:repeat(5,1fr);padding:2px 6px;position:relative;z-index:7">
+      <button onClick="{{ nav.hoje.go }}" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0 8px;background:none;border:0;font-size:12px;cursor:pointer;color:{{ nav.hoje.fg }};font-weight:{{ nav.hoje.fw }}"><span style="display:flex;align-items:center;justify-content:center;width:60px;height:32px;border-radius:999px;transition:background .2s;background:{{ nav.hoje.bg }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span>Hoje</button>
+      <button onClick="{{ nav.cobrancas.go }}" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0 8px;background:none;border:0;font-size:12px;cursor:pointer;color:{{ nav.cobrancas.fg }};font-weight:{{ nav.cobrancas.fw }}"><span style="display:flex;align-items:center;justify-content:center;width:60px;height:32px;border-radius:999px;transition:background .2s;background:{{ nav.cobrancas.bg }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h11l3 3v15H5z"></path><path d="M9 9h6M9 13h6M9 17h4"></path></svg></span>Cobranças</button>
+      <button onClick="{{ nav.clientes.go }}" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0 8px;background:none;border:0;font-size:12px;cursor:pointer;color:{{ nav.clientes.fg }};font-weight:{{ nav.clientes.fw }}"><span style="display:flex;align-items:center;justify-content:center;width:60px;height:32px;border-radius:999px;transition:background .2s;background:{{ nav.clientes.bg }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"></path><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18.5 14.8c1.6.8 2.6 2.5 3 5.2"></path></svg></span>Clientes</button>
+      <button onClick="{{ nav.meses.go }}" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0 8px;background:none;border:0;font-size:12px;cursor:pointer;color:{{ nav.meses.fg }};font-weight:{{ nav.meses.fw }}"><span style="display:flex;align-items:center;justify-content:center;width:60px;height:32px;border-radius:999px;transition:background .2s;background:{{ nav.meses.bg }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2"></rect><path d="M3.5 10h17M8 3v4M16 3v4M8 14.5l2 2 4-4"></path></svg></span>Meses</button>
+      <button onClick="{{ nav.ajustes.go }}" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0 8px;background:none;border:0;font-size:12px;cursor:pointer;color:{{ nav.ajustes.fg }};font-weight:{{ nav.ajustes.fw }}"><span style="display:flex;align-items:center;justify-content:center;width:60px;height:32px;border-radius:999px;transition:background .2s;background:{{ nav.ajustes.bg }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"></path><circle cx="16" cy="7" r="2"></circle><circle cx="10" cy="17" r="2"></circle></svg></span>Ajustes</button>
+    </nav>
+    <sc-if value="{{ showChrome }}" hint-placeholder-val="{{ true }}"><div style="height:18px;flex:none;display:flex;align-items:center;justify-content:center;position:relative;z-index:7"><span style="width:108px;height:4px;border-radius:999px;background:#18203A"></span></div></sc-if>
+
+    <sc-if value="{{ snack.on }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;left:12px;right:12px;bottom:112px;z-index:30;display:flex;align-items:center;gap:12px;background:#18203A;color:#F1F3F9;padding:6px 8px 6px 16px;min-height:52px;border-radius:12px;box-shadow:0 8px 24px -6px rgba(0,0,0,.4)">
+        <span style="flex:1;font-size:15px">{{ snack.msg }}</span>
+        <sc-if value="{{ snack.canUndo }}" hint-placeholder-val="{{ false }}"><button onClick="{{ snack.undo }}" style="background:none;border:0;color:#FFE14D;font-weight:700;padding:10px 10px;cursor:pointer">Desfazer</button></sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ sheetOn }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;inset:0;z-index:20;display:flex;align-items:flex-end">
+        <div onClick="{{ closeSheet }}" style="position:absolute;inset:0;background:rgba(10,16,35,.5)"></div>
+        <div style="position:relative;width:100%;max-height:90%;overflow:auto;background:#fff;border-radius:32px 32px 0 0;padding:10px 20px 28px">
+          <div style="width:40px;height:5px;border-radius:999px;background:#E2E7F1;margin:0 auto 14px"></div>
+
+          <sc-if value="{{ sh.isCharge }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:14px">
+              <span style="width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;font:700 19px/1 'Bricolage Grotesque',sans-serif;background:{{ sh.c.avBg }};color:{{ sh.c.avFg }}">{{ sh.c.ini }}</span>
+              <div style="flex:1;min-width:0"><h3 style="margin:0;font:800 22px/1.2 'Bricolage Grotesque',sans-serif;color:#1F2F6B">{{ sh.c.nome }}</h3><p style="margin:2px 0 0;color:#667090;font-size:15px">{{ sh.c.fone }}</p></div>
+              <button onClick="{{ closeSheet }}" aria-label="Fechar" style="width:40px;height:40px;border-radius:50%;border:0;background:#F1F3F9;color:#667090;font-size:24px;line-height:1;cursor:pointer">×</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:18px 0 4px">
+              <span style="font:800 38px/1 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;font-variant-numeric:tabular-nums">{{ sh.c.amt }}</span>
+              <span style="padding:3px 10px;border-radius:999px;font-size:13px;font-weight:700;background:{{ sh.c.chipBg }};color:{{ sh.c.chipFg }}">{{ sh.c.chip }}</span>
+            </div>
+            <p style="margin:0 0 16px;color:#667090;font-size:15px">{{ sh.c.meta }}</p>
+            <sc-if value="{{ sh.c.isOpen }}" hint-placeholder-val="{{ true }}">
+              <p style="margin:0 0 8px;font-size:14px;font-weight:700;color:#56648C">{{ sh.c.etapaNome }}</p>
+              <div style="display:grid;gap:6px;padding:14px;border-radius:18px;background:#EFEAE2;margin-bottom:12px">
+                <p style="margin:0;justify-self:end;max-width:92%;padding:10px 12px;border-radius:14px 14px 4px 14px;background:#DDF5D3;white-space:pre-wrap;font-size:15px;line-height:1.45">{{ sh.c.msg }}</p>
+<sc-if value="{{ sh.c.duas }}" hint-placeholder-val="{{ false }}">
+                <p style="margin:0;justify-self:end;max-width:92%;padding:10px 12px;border-radius:14px 14px 4px 14px;background:#DDF5D3;font:12.5px/1.45 ui-monospace,Consolas,monospace;word-break:break-all">{{ sh.c.pix }}</p>
+                </sc-if>
+              </div>
+              <a href="{{ sh.c.waHref }}" target="_blank" rel="noopener" onClick="{{ sh.c.sent }}" style="display:flex;align-items:center;justify-content:center;gap:8px;min-height:56px;border-radius:16px;background:#178553;color:#fff;font-weight:700;font-size:18px;text-decoration:none">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"></path></svg>Enviar no WhatsApp</a>
+            </sc-if>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 0">
+              <button onClick="{{ sh.c.copy }}" style="display:grid;justify-items:center;gap:6px;padding:12px 6px;border-radius:16px;border:0;background:#F1F3F9;color:#1F2F6B;font-size:13px;font-weight:700;cursor:pointer"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="8.5" width="11.5" height="11.5" rx="2.5"></rect><path d="M15.5 8.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5"></path></svg>Copiar Pix</button>
+              <button onClick="{{ sh.c.toggle }}" style="display:grid;justify-items:center;gap:6px;padding:12px 6px;border-radius:16px;border:0;background:#E2F3E9;color:#15774A;font-size:13px;font-weight:700;cursor:pointer"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>{{ sh.c.toggleLabel }}</button>
+              <button onClick="{{ sh.c.del }}" style="display:grid;justify-items:center;gap:6px;padding:12px 6px;border-radius:16px;border:0;background:#FBE8E6;color:#BE3A30;font-size:13px;font-weight:700;cursor:pointer"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13"></path></svg>Excluir</button>
+            </div>
+            <sc-if value="{{ sh.c.hasHist }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:16px;padding:12px 14px;border-radius:16px;background:#F1F3F9">
+                <p style="margin:0 0 4px;font-weight:700;color:#1F2F6B">Histórico</p>
+                <sc-for list="{{ sh.c.hist }}" as="h" hint-placeholder-count="1"><p style="margin:0;padding:5px 0;font-size:15px;color:#667090">{{ h }}</p></sc-for>
+              </div>
+            </sc-if>
+          </sc-if>
+
+          <sc-if value="{{ sh.isClient }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:14px">
+              <span style="width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;font:700 19px/1 'Bricolage Grotesque',sans-serif;background:{{ sh.k.avBg }};color:{{ sh.k.avFg }}">{{ sh.k.ini }}</span>
+              <div style="flex:1;min-width:0"><h3 style="margin:0;font:800 22px/1.2 'Bricolage Grotesque',sans-serif;color:#1F2F6B">{{ sh.k.nome }}</h3><p style="margin:2px 0 0;color:#667090;font-size:15px">{{ sh.k.info }}</p></div>
+              <button onClick="{{ closeSheet }}" aria-label="Fechar" style="width:40px;height:40px;border-radius:50%;border:0;background:#F1F3F9;color:#667090;font-size:24px;line-height:1;cursor:pointer">×</button>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px 0">
+              <a href="{{ sh.k.waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:6px;min-height:48px;border-radius:14px;background:#178553;color:#fff;font-weight:700;text-decoration:none">Conversar</a>
+              <button onClick="{{ sh.k.newCharge }}" style="min-height:48px;border-radius:14px;border:0;background:#1F2F6B;color:#fff;font-weight:700;cursor:pointer">Nova cobrança</button>
+            </div>
+            <p style="margin:0 0 8px;font-size:14px;font-weight:700;color:#56648C">Cobranças</p>
+            <div style="display:grid;gap:1px;background:#E2E7F1;border-radius:18px;overflow:hidden;border:1px solid #E2E7F1">
+              <sc-for list="{{ sh.k.list }}" as="c" hint-placeholder-count="2">
+                <button onClick="{{ c.open }}" style="display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;background:#fff;border:0;text-align:left;cursor:pointer">
+                  <span style="flex:1;min-width:0;display:grid;gap:1px"><span style="font-weight:700">{{ c.desc }}</span><span style="justify-self:start;margin-top:4px;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:700;background:{{ c.chipBg }};color:{{ c.chipFg }}">{{ c.chip }}</span></span>
+                  <span style="font:700 17px/1.1 'Bricolage Grotesque',sans-serif;font-variant-numeric:tabular-nums">{{ c.amt }}</span>
+                </button>
+              </sc-for>
+            </div>
+            <sc-if value="{{ sh.k.empty }}" hint-placeholder-val="{{ false }}"><p style="margin:0;color:#667090;font-size:15px">Nenhuma cobrança ainda.</p></sc-if>
+          </sc-if>
+
+          <sc-if value="{{ sh.isNewCharge }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h3 style="margin:0;font:800 22px/1.2 'Bricolage Grotesque',sans-serif;color:#1F2F6B">Nova cobrança</h3><button onClick="{{ closeSheet }}" aria-label="Fechar" style="width:40px;height:40px;border-radius:50%;border:0;background:#F1F3F9;color:#667090;font-size:24px;line-height:1;cursor:pointer">×</button></div>
+            <div style="display:grid;gap:14px">
+              <label style="display:grid;gap:6px;font-weight:700;font-size:15px">Cliente
+                <select value="{{ f.cliente }}" onChange="{{ fc.cliente }}" style="width:100%;min-height:50px;padding:11px 14px;border-radius:14px;border:1.5px solid #E2E7F1;background:#F1F3F9;font-weight:400;font-size:17px">
+                  <option value="">Escolha…</option>
+                  <sc-for list="{{ cliOpts }}" as="o" hint-placeholder-count="0"><option value="{{ o.id }}">{{ o.nome }}</option></sc-for>
+                </select>
+              </label>
+              <button onClick="{{ quickClient }}" style="justify-self:start;margin-top:-6px;background:none;border:0;padding:2px 0;color:#1F2F6B;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer">+ Cadastrar novo cliente</button>
+              <label style="display:grid;gap:6px;font-weight:700;font-size:15px">Descrição<input value="{{ f.desc }}" onChange="{{ fc.desc }}" placeholder="Ex.: Mensalidade de outubro" style="width:100%;min-height:50px;padding:11px 14px;border-radius:14px;border:1.5px solid #E2E7F1;background:#F1F3F9;font-weight:400;font-size:17px"></label>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                <label style="display:grid;gap:6px;font-weight:700;font-size:15px">Valor<span style="display:flex;align-items:center;border:1.5px solid #E2E7F1;border-radius:14px;background:#F1F3F9;padding-left:14px"><span style="font-weight:700;color:#667090">R$</span><input value="{{ f.valor }}" onChange="{{ fc.valor }}" inputmode="decimal" placeholder="0,00" style="width:100%;min-height:47px;padding:0 10px;border:0 !important;background:none !important;font-weight:400;font-size:17px"></span></label>
+                <label style="display:grid;gap:6px;font-weight:700;font-size:15px">Vencimento<input type="date" value="{{ f.venc }}" onChange="{{ fc.venc }}" style="width:100%;min-height:50px;padding:11px 10px;border-radius:14px;border:1.5px solid #E2E7F1;background:#F1F3F9;font-weight:400;font-size:16px"></label>
+              </div>
+              <sc-if value="{{ fNote }}" hint-placeholder-val="{{ false }}"><p style="margin:-4px 0 0;font-size:14px;color:#667090">{{ fNoteText }}</p></sc-if>
+              <sc-if value="{{ fErr }}" hint-placeholder-val="{{ false }}"><p style="margin:0;padding:10px 14px;border-radius:12px;background:#FBE8E6;color:#BE3A30;font-size:15px;font-weight:700">{{ fErrText }}</p></sc-if>
+              <button onClick="{{ createCharge }}" style="min-height:56px;border-radius:16px;border:0;background:#1F2F6B;color:#fff;font-weight:700;font-size:18px;cursor:pointer">Salvar cobrança</button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ sh.isNewClient }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h3 style="margin:0;font:800 22px/1.2 'Bricolage Grotesque',sans-serif;color:#1F2F6B">Novo cliente</h3><button onClick="{{ closeSheet }}" aria-label="Fechar" style="width:40px;height:40px;border-radius:50%;border:0;background:#F1F3F9;color:#667090;font-size:24px;line-height:1;cursor:pointer">×</button></div>
+            <div style="display:grid;gap:14px">
+              <label style="display:grid;gap:6px;font-weight:700;font-size:15px">Nome<input value="{{ f.nome }}" onChange="{{ fc.nome }}" placeholder="Ex.: Maria Silva" style="width:100%;min-height:50px;padding:11px 14px;border-radius:14px;border:1.5px solid #E2E7F1;background:#F1F3F9;font-weight:400;font-size:17px"></label>
+              <label style="display:grid;gap:6px;font-weight:700;font-size:15px">WhatsApp<input value="{{ f.fone }}" onChange="{{ fc.fone }}" inputmode="tel" placeholder="(11) 98765-4321" style="width:100%;min-height:50px;padding:11px 14px;border-radius:14px;border:1.5px solid #E2E7F1;background:#F1F3F9;font-weight:400;font-size:17px"></label>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                <label style="display:grid;gap:6px;font-weight:700;font-size:15px">Mensalidade <span style="font-weight:400;color:#667090;font-size:13px;margin-top:-6px">opcional</span><input value="{{ f.mensal }}" onChange="{{ fc.mensal }}" inputmode="decimal" placeholder="R$ 0,00" style="width:100%;min-height:50px;padding:11px 14px;border-radius:14px;border:1.5px solid #E2E7F1;background:#F1F3F9;font-weight:400;font-size:17px"></label>
+                <label style="display:grid;gap:6px;font-weight:700;font-size:15px">Dia do venc. <span style="font-weight:400;color:#667090;font-size:13px;margin-top:-6px">1 a 31</span><input value="{{ f.dia }}" onChange="{{ fc.dia }}" inputmode="numeric" placeholder="10" style="width:100%;min-height:50px;padding:11px 14px;border-radius:14px;border:1.5px solid #E2E7F1;background:#F1F3F9;font-weight:400;font-size:17px"></label>
+              </div>
+              <sc-if value="{{ fErr }}" hint-placeholder-val="{{ false }}"><p style="margin:0;padding:10px 14px;border-radius:12px;background:#FBE8E6;color:#BE3A30;font-size:15px;font-weight:700">{{ fErrText }}</p></sc-if>
+              <button onClick="{{ createClient }}" style="min-height:56px;border-radius:16px;border:0;background:#1F2F6B;color:#fff;font-weight:700;font-size:18px;cursor:pointer">Salvar cliente</button>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;firstRun&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Teste&quot;},&quot;startTab&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;hoje&quot;,&quot;cobrancas&quot;,&quot;clientes&quot;,&quot;meses&quot;,&quot;ajustes&quot;],&quot;default&quot;:&quot;hoje&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Teste&quot;}}">
+const MESES=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const DIAS=['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
+const BRL=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
+const money=c=>BRL.format((c||0)/100);
+const AV=[['#E4EAFD','#2A3F8F'],['#DDF2EA','#1C6B4B'],['#FCE7DA','#94461C'],['#EFE3FA','#6A3597'],['#FDF1C9','#7A5A06'],['#DDF0F7','#1D5F78']];
+const ST={lembrete:['#E7ECFB','#1F2F6B','#56648C'],hoje:['#FCEFD5','#8F5E07','#8F5E07'],atraso:['#FBE8E6','#BE3A30','#BE3A30'],firme:['#BE3A30','#FFFFFF','#BE3A30'],paga:['#E2F3E9','#15774A','#15774A']};
+const ETAPA={lembrete:'Lembrete antes do vencimento',hoje:'No dia do vencimento',atraso:'Atraso leve (1 a 6 dias)',firme:'Atraso firme (7 dias ou mais)'};
+const TPL={
+  lembrete:"Oi, {nome}! Tudo bem? Passando para lembrar que o pagamento referente a {descricao} ({valor}) vence em {vencimento}.\n\n{instrucoes}\n\nObrigado!",
+  hoje:"Oi, {nome}! Hoje é o vencimento do pagamento referente a {descricao} ({valor}).\n\n{instrucoes}\n\nSe já pagou, pode desconsiderar.",
+  atraso:"Oi, {nome}, tudo certo? O pagamento referente a {descricao} ({valor}) venceu em {vencimento} e ainda não localizei. Se já pagou, me mande o comprovante, por favor.\n\n{instrucoes}",
+  firme:"Olá, {nome}. O pagamento referente a {descricao}, no valor de {valor}, está em aberto desde {vencimento} ({dias} dias). Preciso que seja regularizado. Se estiver com alguma dificuldade, me avise para combinarmos.\n\n{instrucoes}"
+};
+const AVISO="Vou mandar o código Pix na próxima mensagem. É só tocar e segurar nele, escolher Copiar e colar no app do seu banco, na opção Pix copia e cola.";
+const INSTR_LINK="Para pagar, toque no link abaixo e depois em Copiar código Pix. Em seguida, cole no app do seu banco, na opção Pix copia e cola. Se preferir, a página também mostra o QR Code.\n{link}";
+const PAGE_DEFAULT='https://ceeduardocar.github.io/caderninho/';
+const b64url=s=>btoa(unescape(encodeURIComponent(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const pad=n=>String(n).padStart(2,'0');
+const toStr=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parseD=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);};
+const today=()=>toStr(new Date());
+const addDays=(s,n)=>{const d=parseD(s);d.setDate(d.getDate()+n);return toStr(d);};
+const diff=(a,b)=>Math.round((parseD(a)-parseD(b))/864e5);
+const fmtD=s=>{const [,m,d]=s.split('-');return `${d}/${m}`;};
+const fmtDL=s=>{const [y,m,d]=s.split('-');return `${d}/${m}/${y}`;};
+const plural=(n,a,b)=>n===1?a:b;
+const first=n=>String(n||'').trim().split(/\s+/)[0]||'';
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+function parseMoney(s){s=String(s||'').replace(/[^\d,.]/g,'');if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');const v=Math.round(parseFloat(s)*100);return Number.isFinite(v)&&v>0?v:null;}
+function hashN(s){let h=0;for(const ch of String(s))h=(h*31+ch.charCodeAt(0))>>>0;return h;}
+function ini(n){const p=String(n||'?').trim().split(/\s+/);return((p[0]||'?')[0]+(p.length>1?p[p.length-1][0]:'')).toUpperCase();}
+function fmtFone(f){const d=String(f||'').replace(/\D/g,'');return d.length===11?`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`:f||'Sem WhatsApp';}
+function crc16(str){let c=0xFFFF;for(let i=0;i<str.length;i++){c^=str.charCodeAt(i)<<8;for(let j=0;j<8;j++){c=(c&0x8000)?((c<<1)^0x1021):(c<<1);c&=0xFFFF;}}return c.toString(16).toUpperCase().padStart(4,'0');}
+const tlv=(id,v)=>id+String(v.length).padStart(2,'0')+v;
+const ascii=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\x20-\x7E]/g,'').trim();
+function pixKey(st){const k=String(st.pixChave||'').trim();if(!k)return'';if(st.pixTipo==='cpf')return k.replace(/\D/g,'');if(st.pixTipo==='celular'){let d=k.replace(/\D/g,'');if(!d.startsWith('55'))d='55'+d;return'+'+d;}if(st.pixTipo==='email')return k.toLowerCase();return k;}
+function pixPayload(st,cents,txid){const key=pixKey(st);if(!key)return'';const p=tlv('00','01')+tlv('26',tlv('00','br.gov.bcb.pix')+tlv('01',key))+tlv('52','0000')+tlv('53','986')+tlv('54',(cents/100).toFixed(2))+tlv('58','BR')+tlv('59',ascii(st.nome).slice(0,25)||'RECEBEDOR')+tlv('60',ascii(st.cidade).toUpperCase().slice(0,15)||'BRASIL')+tlv('62',tlv('05',String(txid).replace(/[^A-Za-z0-9]/g,'').slice(0,25)||'***'))+'6304';return p+crc16(p);}
+const uid=()=>(Date.now().toString(36)+Math.random().toString(36).slice(2,6)).toUpperCase();
+
+function demoData(){
+  const t=today();const ref=t.slice(0,7);
+  const cl=[['c1','Ana Souza','11987654321',25000,Number(t.slice(8))],['c2','Bruno Lima','11991234567',0,0],['c3','Carla Mendes','21998765432',0,0],['c4','Diego Rocha','11976543210',25000,Number(addDays(t,2).slice(8))],['c5','Elaine Prado','31987651234',0,0],['c6','Fábio Nunes','11965432109',15000,5],['c7','Gabriela Torres','11954321098',0,0]]
+    .map(([id,nome,fone,mensalidade,dia])=>({id,nome,fone,mensalidade,dia}));
+  const k=(id,c,desc,valor,dv,paidD,contatos)=>({id,clienteId:c,descricao:desc,valor,venc:addDays(t,dv),status:paidD==null?'aberta':'paga',pagaEm:paidD==null?null:addDays(t,paidD),contatos:contatos||[]});
+  const mes=MESES[new Date().getMonth()];
+  return {clientes:cl,cobrancas:[
+    k('K1','c1',`Mensalidade de ${mes}`,25003,0),
+    k('K2','c2','Aulas de violão',18002,-3,null,[{data:addDays(t,-5),etapa:'lembrete'}]),
+    k('K3','c3','Bolo de aniversário',9501,-9,null,[{data:addDays(t,-9),etapa:'hoje'},{data:addDays(t,-6),etapa:'atraso'}]),
+    k('K4','c4',`Mensalidade de ${mes}`,25004,2),
+    k('K5','c5','Conserto da máquina',32005,5),
+    k('K6','c6','Mensalidade anterior',15006,-8,-6),
+    k('K7','c1','Mensalidade anterior',25001,-30,-29),
+    k('K8','c7','Encomenda de salgados',12007,12),
+    k('K9','c7','Encomenda de doces',8508,-1,-1),
+    k('K10','c2','Aulas de violão',18009,-33,-30)
+  ]};
+}
+const KEY='caderninho:v1';
+const isReal=()=>{try{return window.matchMedia('(max-width:520px)').matches||window.matchMedia('(display-mode: standalone)').matches;}catch(e){return false;}};
+function emptyF(){return{cliente:'',desc:'',valor:'',venc:addDays(today(),7),nome:'',fone:'',mensal:'',dia:''};}
+
+class Component extends DCLogic {
+  state = (()=>{const real=isReal();let sv=null;try{sv=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){}
+    const fr=this.props.firstRun||(real&&!sv);const d=sv?{clientes:sv.clientes||[],cobrancas:sv.cobrancas||[]}:fr?{clientes:[],cobrancas:[]}:demoData();return{real,
+    tab:this.props.startTab||'hoje',filtro:'abertas',sheet:null,busca:'',cliQ:'',mOff:0,snack:null,f:emptyF(),err:'',
+    settings:sv&&sv.settings?sv.settings:{nome:fr?'':'Eduardo',cidade:'São Paulo',pixTipo:'email',pixChave:fr?'':'eduardo@email.com',centavos:true},
+    clientes:d.clientes,cobrancas:d.cobrancas,clock:''};})();
+  scrollRef = React.createRef();
+  componentDidMount(){this.tick();this.iv=setInterval(()=>this.tick(),30000);this.rs=()=>{const r=isReal();if(r!==this.state.real)this.setState({real:r});};window.addEventListener('resize',this.rs);}
+  componentWillUnmount(){clearInterval(this.iv);clearTimeout(this.st);window.removeEventListener('resize',this.rs);}
+  componentDidUpdate(pp,ps){
+    const s=this.state;if(!ps||ps.clientes!==s.clientes||ps.cobrancas!==s.cobrancas||ps.settings!==s.settings){try{localStorage.setItem(KEY,JSON.stringify({clientes:s.clientes,cobrancas:s.cobrancas,settings:s.settings}));}catch(e){}}
+    if(pp.firstRun!==this.props.firstRun){this.props.firstRun?this.wipe(true):this.loadDemo();}
+    if(pp.startTab!==this.props.startTab&&this.props.startTab)this.setState({tab:this.props.startTab});
+  }
+  tick(){const d=new Date();this.setState({clock:`${pad(d.getHours())}:${pad(d.getMinutes())}`});}
+  goTab(t){this.setState({tab:t,sheet:null});if(this.scrollRef.current)this.scrollRef.current.scrollTop=0;}
+  toast(msg,undo){clearTimeout(this.st);this.setState({snack:{msg,undo}});this.st=setTimeout(()=>this.setState({snack:null}),4200);}
+  cli(id){return this.state.clientes.find(c=>c.id===id);}
+  info(c){
+    if(c.status==='paga')return{etapa:'paga',label:`Paga em ${fmtD(c.pagaEm)}`,dias:0};
+    const d=diff(today(),c.venc);
+    if(d<0)return{etapa:'lembrete',label:`Vence em ${-d} ${plural(-d,'dia','dias')}`,dias:d};
+    if(d===0)return{etapa:'hoje',label:'Vence hoje',dias:0};
+    return{etapa:d<7?'atraso':'firme',label:`Atrasada há ${d} ${plural(d,'dia','dias')}`,dias:d};
+  }
+  precisa(c){
+    if(c.status==='paga')return false;const d=diff(today(),c.venc);if(d<-2)return false;
+    let p=-2;for(const q of[-2,0,3,7])if(q<=d)p=q;if(d>=14)p=Math.floor(d/7)*7;
+    const ponto=addDays(c.venc,p);const u=(c.contatos||[]).map(x=>x.data).sort().pop();return!u||u<ponto;
+  }
+  modo(){return this.state.settings.envio==='duas'?'duas':'link';}
+  payLink(c){
+    const st=this.state.settings;const p=pixPayload(st,c.valor,c.id);if(!p)return'';
+    const base=(String(st.linkBase||'').trim()||PAGE_DEFAULT).split('#')[0];
+    return base+'#pagar='+b64url(JSON.stringify({p,n:st.nome,d:c.descricao,v:c.valor,e:c.venc}));
+  }
+  msg(c){
+    const cl=this.cli(c.clienteId)||{};const i=this.info(c);const et=i.etapa==='paga'?'hoje':i.etapa;
+    const tem=!!pixPayload(this.state.settings,c.valor,c.id);
+    const instr=!tem?'(cadastre sua chave Pix em Ajustes)':this.modo()==='link'?INSTR_LINK.replace('{link}',this.payLink(c)):AVISO;
+    return TPL[et].replaceAll('{instrucoes}',instr).replaceAll('{nome}',first(cl.nome)).replaceAll('{valor}',money(c.valor)).replaceAll('{descricao}',c.descricao).replaceAll('{vencimento}',fmtDL(c.venc)).replaceAll('{dias}',Math.max(i.dias,0));
+  }
+  waNum(cl){let f=String((cl||{}).fone||'').replace(/\D/g,'');if(f&&!f.startsWith('55'))f='55'+f;return f;}
+  updC(id,fn){this.setState(s=>({cobrancas:s.cobrancas.map(c=>c.id===id?fn(c):c)}));}
+  markPaid(id){
+    const c=this.state.cobrancas.find(x=>x.id===id);const prev={...c};const nm=first((this.cli(c.clienteId)||{}).nome);
+    this.updC(id,x=>({...x,status:'paga',pagaEm:today()}));
+    this.toast(`Pagamento de ${nm} registrado`,()=>{this.updC(id,()=>prev);this.setState({snack:null});});
+  }
+  reopen(id){this.updC(id,x=>({...x,status:'aberta',pagaEm:null}));this.toast('Cobrança reaberta');}
+  sent(id){
+    const c=this.state.cobrancas.find(x=>x.id===id);const e=this.info(c).etapa;
+    this.updC(id,x=>({...x,contatos:[...(x.contatos||[]),{data:today(),etapa:e}]}));
+    this.setState({sheet:null});this.toast(`Cobrança enviada para ${first((this.cli(c.clienteId)||{}).nome)}`);
+  }
+  del(id){
+    const c=this.state.cobrancas.find(x=>x.id===id);const idx=this.state.cobrancas.indexOf(c);
+    this.setState(s=>({cobrancas:s.cobrancas.filter(x=>x.id!==id),sheet:null}));
+    this.toast('Cobrança excluída',()=>{this.setState(s=>{const a=[...s.cobrancas];a.splice(idx,0,c);return{cobrancas:a,snack:null};});});
+  }
+  copy(id){const c=this.state.cobrancas.find(x=>x.id===id);const p=pixPayload(this.state.settings,c.valor,c.id);if(!p){this.toast('Cadastre sua chave Pix em Ajustes');return;}try{navigator.clipboard.writeText(p);}catch(e){}this.toast('Código Pix copiado');}
+  unique(base){if(!this.state.settings.centavos)return base;const u=new Set(this.state.cobrancas.filter(c=>c.status!=='paga').map(c=>c.valor));for(let k=1;k<100;k++)if(!u.has(base+k))return base+k;return base;}
+  openNewCharge(cid){this.setState({sheet:{t:'newCharge'},f:{...emptyF(),cliente:cid||''},err:''});}
+  openNewClient(){this.setState(s=>({sheet:{t:'newClient',back:s.sheet&&s.sheet.t==='newCharge'?s.f:null},f:{...s.f,nome:'',fone:'',mensal:'',dia:''},err:''}));}
+  createCharge(){
+    const f=this.state.f;const v=parseMoney(f.valor);
+    if(!f.cliente)return this.setState({err:'Escolha o cliente.'});
+    if(!f.desc.trim())return this.setState({err:'Escreva uma descrição.'});
+    if(!v)return this.setState({err:'Informe um valor válido.'});
+    if(!f.venc)return this.setState({err:'Informe o vencimento.'});
+    const valor=this.unique(v);
+    this.setState(s=>({cobrancas:[...s.cobrancas,{id:uid(),clienteId:f.cliente,descricao:f.desc.trim(),valor,venc:f.venc,status:'aberta',contatos:[]}],sheet:null,f:emptyF()}));
+    this.toast(`Cobrança de ${money(valor)} criada`);
+  }
+  createClient(){
+    const f=this.state.f;
+    if(!f.nome.trim())return this.setState({err:'Informe o nome.'});
+    const d=String(f.fone).replace(/\D/g,'');if(d.length<10)return this.setState({err:'Informe um WhatsApp com DDD.'});
+    const id=uid();const back=this.state.sheet&&this.state.sheet.back;
+    this.setState(s=>({clientes:[...s.clientes,{id,nome:f.nome.trim(),fone:d,mensalidade:parseMoney(f.mensal)||0,dia:Number(f.dia)||0}],
+      sheet:back?{t:'newCharge'}:null,f:back?{...back,cliente:id}:emptyF(),err:''}));
+    this.toast(`${first(f.nome)} adicionado`);
+  }
+  loadDemo(){const d=demoData();this.setState(s=>({...d,settings:{...s.settings,nome:s.settings.nome||'Eduardo',pixChave:s.settings.pixChave||'eduardo@email.com'},sheet:null}));this.toast('Dados de exemplo carregados');}
+  wipe(silent){this.setState(s=>({clientes:[],cobrancas:[],sheet:null,settings:{...s.settings,nome:'',pixChave:''}}));if(silent!==true)this.toast('Tudo apagado');}
+
+  item(c){
+    const cl=this.cli(c.clienteId)||{nome:'Cliente removido'};const i=this.info(c);const st=ST[i.etapa];const a=AV[hashN(cl.nome)%6];
+    return{id:c.id,nome:cl.nome,ini:ini(cl.nome),avBg:a[0],avFg:a[1],desc:c.descricao,sub:c.status==='paga'?c.descricao:`${c.descricao}, vence ${fmtD(c.venc)}`,
+      chip:i.label,chipBg:st[0],chipFg:st[1],stripe:st[2],amt:money(c.valor),
+      open:()=>this.setState({sheet:{t:'charge',id:c.id}}),paid:()=>this.markPaid(c.id)};
+  }
+  renderVals(){
+    const s=this.state;const t=today();const now=new Date();
+    const ab=s.cobrancas.filter(c=>c.status!=='paga');const byV=(a,b)=>a.venc.localeCompare(b.venc);
+    const total=ab.reduce((x,c)=>x+c.valor,0);
+    const late=ab.filter(c=>diff(t,c.venc)>0);
+    const week=ab.filter(c=>{const d=diff(c.venc,t);return d>=0&&d<=7;});
+    const doMes=s.cobrancas.filter(c=>c.venc.slice(0,7)===t.slice(0,7));
+    const cob=doMes.reduce((x,c)=>x+c.valor,0);const got=doMes.filter(c=>c.status==='paga').reduce((x,c)=>x+c.valor,0);
+    const cobrar=ab.filter(c=>this.precisa(c)).sort(byV);
+    const prox=ab.filter(c=>!cobrar.includes(c)&&diff(c.venc,t)>=0&&diff(c.venc,t)<=7).sort(byV);
+    const h=now.getHours();const nome=first(s.settings.nome);
+    const steps=[[!!s.settings.pixChave,'Cadastre sua chave Pix','Assim o código sai pronto nas mensagens.','Cadastrar',()=>this.goTab('ajustes')],
+      [s.clientes.length>0,'Adicione seu primeiro cliente','Nome e WhatsApp já bastam.','Adicionar',()=>this.openNewClient()],
+      [s.cobrancas.length>0,'Crie sua primeira cobrança','Informe o valor e o vencimento.','Criar',()=>this.openNewCharge()]]
+      .map(([ok,tt,d,b,go],i)=>({n:ok?'✓':String(i+1),nBg:ok?'#E2F3E9':'#E7ECFB',nFg:ok?'#15774A':'#1F2F6B',t:tt,d,b,go,todo:!ok,deco:ok?'line-through':'none',tColor:ok?'#667090':'#18203A'}));
+
+    // busca
+    let buscaRes=[],buscaMsg='';const alvo=parseMoney(s.busca);
+    if(alvo){const ex=ab.filter(c=>c.valor===alvo);if(ex.length)buscaRes=ex.map(c=>this.item(c));
+      else{const pr=ab.filter(c=>Math.floor(c.valor/100)===Math.floor(alvo/100));buscaRes=pr.map(c=>this.item(c));buscaMsg=`Nenhuma cobrança com exatamente ${money(alvo)}.${pr.length?' Valores parecidos:':''}`;}}
+
+    // cobranças
+    const F={abertas:['Abertas',c=>c.status!=='paga'],atrasadas:['Atrasadas',c=>c.status!=='paga'&&diff(t,c.venc)>0],pagas:['Pagas',c=>c.status==='paga'],todas:['Todas',()=>true]};
+    const filters=Object.entries(F).map(([k,[label,fn]])=>{const on=s.filtro===k;return{label,n:String(s.cobrancas.filter(fn).length),bg:on?'#1F2F6B':'#fff',fg:on?'#fff':'#1F2F6B',bd:on?'#1F2F6B':'#E2E7F1',pick:()=>this.setState({filtro:k})};});
+    const fl=s.cobrancas.filter(F[s.filtro][1]).sort(s.filtro==='pagas'?(a,b)=>(b.pagaEm||'').localeCompare(a.pagaEm||''):byV);
+    const flTot=fl.reduce((x,c)=>x+c.valor,0);
+
+    // clientes
+    const q=s.cliQ.trim().toLowerCase();
+    const cliList=s.clientes.filter(c=>!q||c.nome.toLowerCase().includes(q)).sort((a,b)=>a.nome.localeCompare(b.nome)).map(cl=>{
+      const op=ab.filter(c=>c.clienteId===cl.id);const tot=op.reduce((x,c)=>x+c.valor,0);const lt=op.some(c=>diff(t,c.venc)>0);const a=AV[hashN(cl.nome)%6];
+      return{nome:cl.nome,ini:ini(cl.nome),avBg:a[0],avFg:a[1],sub:cl.mensalidade?`Mensalidade ${money(cl.mensalidade)}, dia ${cl.dia}`:fmtFone(cl.fone),
+        amt:op.length?money(tot):'—',amtColor:lt?'#BE3A30':'#18203A',state:op.length?(lt?'Em atraso':`${op.length} em aberto`):'Em dia',open:()=>this.setState({sheet:{t:'client',id:cl.id}})};});
+
+    // meses
+    const md=new Date(now.getFullYear(),now.getMonth()+s.mOff,1);const mref=toStr(md).slice(0,7);
+    const ml=s.cobrancas.filter(c=>c.venc.slice(0,7)===mref).sort(byV);
+    const mAll=ml.reduce((x,c)=>x+c.valor,0);const mGot=ml.filter(c=>c.status==='paga').reduce((x,c)=>x+c.valor,0);
+    const mLate=ml.filter(c=>c.status!=='paga'&&diff(t,c.venc)>0).reduce((x,c)=>x+c.valor,0);
+    const mPct=mAll?Math.round(mGot/mAll*100):0;
+
+    // sheet
+    const sh={isCharge:false,isClient:false,isNewCharge:false,isNewClient:false,c:{},k:{}};
+    if(s.sheet){
+      if(s.sheet.t==='charge'){const c=s.cobrancas.find(x=>x.id===s.sheet.id);if(c){sh.isCharge=true;const it=this.item(c);const cl=this.cli(c.clienteId)||{};const i=this.info(c);const open=c.status!=='paga';
+        const pix=pixPayload(s.settings,c.valor,c.id);
+        sh.c={...it,fone:fmtFone(cl.fone),isOpen:open,meta:`${c.descricao} · vence em ${fmtDL(c.venc)}`,etapaNome:open?`Mensagem: ${ETAPA[i.etapa==='paga'?'hoje':i.etapa].toLowerCase()}`:'',
+          msg:this.msg(c),duas:this.modo()==='duas'&&!!pix,pix:pix||'Cadastre sua chave Pix em Ajustes para gerar o código.',waHref:`https://wa.me/${this.waNum(cl)}?text=${encodeURIComponent(this.msg(c))}`,
+          sent:()=>this.sent(c.id),copy:()=>this.copy(c.id),toggle:()=>{open?this.markPaid(c.id):this.reopen(c.id);},toggleLabel:open?'Recebi':'Reabrir',del:()=>this.del(c.id),
+          hist:[...(c.contatos||[]).map(x=>`${fmtD(x.data)} · cobrança enviada (${ETAPA[x.etapa]?ETAPA[x.etapa].split(' (')[0].toLowerCase():x.etapa})`),...(c.pagaEm?[`${fmtD(c.pagaEm)} · pagamento recebido`]:[])],
+          hasHist:(c.contatos||[]).length>0||!!c.pagaEm};}}
+      if(s.sheet.t==='client'){const cl=this.cli(s.sheet.id);if(cl){sh.isClient=true;const a=AV[hashN(cl.nome)%6];const lst=s.cobrancas.filter(c=>c.clienteId===cl.id).sort((x,y)=>y.venc.localeCompare(x.venc)).map(c=>this.item(c));
+        sh.k={nome:cl.nome,ini:ini(cl.nome),avBg:a[0],avFg:a[1],info:fmtFone(cl.fone)+(cl.mensalidade?` · ${money(cl.mensalidade)}/mês`:''),waHref:`https://wa.me/${this.waNum(cl)}`,list:lst,empty:!lst.length,newCharge:()=>this.openNewCharge(cl.id)};}}
+      if(s.sheet.t==='newCharge')sh.isNewCharge=true;
+      if(s.sheet.t==='newClient')sh.isNewClient=true;
+    }
+    const fc={};['cliente','desc','valor','venc','nome','fone','mensal','dia'].forEach(k=>{fc[k]=e=>{const v=e.target.value;this.setState(st=>({f:{...st.f,[k]:v},err:''}));};});
+    const fv=parseMoney(s.f.valor);const fu=fv?this.unique(fv):0;
+    const setS=k=>e=>{const v=e.target.value;this.setState(st=>({settings:{...st.settings,[k]:v}}));};
+    const nav={};['hoje','cobrancas','clientes','meses','ajustes'].forEach(k=>{const on=s.tab===k;nav[k]={bg:on?'#FFE14D':'transparent',fg:on?'#1F2F6B':'#667090',fw:on?700:400,go:()=>this.goTab(k)};});
+    const titles={hoje:'Hoje',cobrancas:'Cobranças',clientes:'Clientes',meses:'Meses',ajustes:'Ajustes'};
+
+    return{
+      showChrome:!s.real,outerStyle:s.real?'min-height:100dvh;display:block':'min-height:100vh;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:48px;padding:32px 24px',
+      frameStyle:s.real?'width:100%;height:100dvh;background:linear-gradient(180deg,#EAEEFB 0%,#F5F4EE 100%);position:relative;overflow:hidden;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)':'width:392px;height:844px;border-radius:44px;border:10px solid #111318;background:linear-gradient(180deg,#EAEEFB 0%,#F5F4EE 100%);position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 30px 60px -20px rgba(24,32,58,.45);flex:none',
+      clock:s.clock,scrollRef:this.scrollRef,isHoje:s.tab==='hoje',notHoje:s.tab!=='hoje',isCob:s.tab==='cobrancas',isCli:s.tab==='clientes',isMes:s.tab==='meses',isAju:s.tab==='ajustes',
+      title:titles[s.tab],dateLabel:`${cap(DIAS[now.getDay()])}, ${now.getDate()} de ${MESES[now.getMonth()]}`,
+      greeting:`${h<12?'Bom dia':h<18?'Boa tarde':'Boa noite'}${nome?', '+nome:''}!`,total:money(total),
+      hasLate:late.length>0,noLate:!late.length&&ab.length>0,lateLabel:`${late.length} ${plural(late.length,'atrasada','atrasadas')}, ${money(late.reduce((x,c)=>x+c.valor,0))}`,
+      goLate:()=>{this.setState({filtro:'atrasadas'});this.goTab('cobrancas');},
+      hasWeek:week.length>0,weekLabel:`${week.length} ${plural(week.length,'vence','vencem')} nos próximos 7 dias`,
+      hasMonth:cob>0,monthPct:`${cob?Math.round(got/cob*100):0}%`,monthName:cap(MESES[now.getMonth()]),monthGot:money(got),monthAll:money(cob),
+      showSetup:steps.some(x=>x.todo),steps,loadDemo:()=>this.loadDemo(),wipe:()=>this.wipe(),
+      hasCharges:s.cobrancas.length>0,cobrar:cobrar.map(c=>this.item(c)),hasCobrar:cobrar.length>0,noCobrar:!cobrar.length,cobrarCount:String(cobrar.length),
+      busca:s.busca,setBusca:e=>this.setState({busca:e.target.value}),buscaRes,buscaMsg,buscaNada:!!buscaMsg,
+      hasProx:prox.length>0,prox:prox.map(c=>this.item(c)),
+      filters,cobList:fl.map(c=>this.item(c)),cobEmpty:!fl.length,filterSum:`${fl.length} ${plural(fl.length,'cobrança','cobranças')} · ${money(flTot)}`,
+      cliQ:s.cliQ,setCliQ:e=>this.setState({cliQ:e.target.value}),cliList,cliEmpty:!cliList.length,
+      mes:{label:`${cap(MESES[md.getMonth()])} ${md.getFullYear()}`,dash:`${(mPct/100*251.3).toFixed(1)} 251.3`,pct:`${mPct}%`,got:money(mGot),open:money(mAll-mGot),late:money(mLate),list:ml.map(c=>this.item(c)),empty:!ml.length},
+      prevMonth:()=>this.setState(x=>({mOff:x.mOff-1})),nextMonth:()=>this.setState(x=>({mOff:x.mOff+1})),
+      set:s.settings,setNome:setS('nome'),setCidade:setS('cidade'),setPixTipo:setS('pixTipo'),setPixChave:setS('pixChave'),setLinkBase:setS('linkBase'),
+      envioLink:{bg:s.settings.envio!=='duas'?'#1F2F6B':'#F1F3F9',fg:s.settings.envio!=='duas'?'#fff':'#1F2F6B'},envioDuas:{bg:s.settings.envio==='duas'?'#1F2F6B':'#F1F3F9',fg:s.settings.envio==='duas'?'#fff':'#1F2F6B'},
+      setEnvioLink:()=>this.setState(x=>({settings:{...x.settings,envio:'link'}})),setEnvioDuas:()=>this.setState(x=>({settings:{...x.settings,envio:'duas'}})),
+      envioDesc:s.settings.envio==='duas'?'Primeiro o texto, depois o código sozinho para copiar.':'Um toque envia tudo. O cliente abre o link e copia o código com um botão, ou lê o QR Code.',
+      toggleCent:()=>this.setState(x=>({settings:{...x.settings,centavos:!x.settings.centavos}})),cent:{track:s.settings.centavos?'#15774A':'#E2E7F1',knob:s.settings.centavos?'translateX(20px)':'none'},
+      regua:[['lembrete','2 dias antes','Lembrete gentil'],['hoje','No dia','Aviso de vencimento'],['atraso','3 dias depois','Atraso leve'],['firme','7 dias depois','Atraso firme, repete a cada 7 dias']].map(([e,quando,nome])=>({quando,nome,bg:ST[e][0],fg:ST[e][1]})),
+      showFab:['hoje','cobrancas','clientes'].includes(s.tab)&&!s.sheet,fabLabel:s.tab==='clientes'?'Novo cliente':'Nova cobrança',
+      fabGo:()=>s.tab==='clientes'?this.openNewClient():this.openNewCharge(),
+      nav,snack:{on:!!s.snack,msg:s.snack?s.snack.msg:'',canUndo:!!(s.snack&&s.snack.undo),undo:()=>s.snack&&s.snack.undo&&s.snack.undo()},
+      sheetOn:!!s.sheet,closeSheet:()=>this.setState({sheet:null}),sh,
+      f:s.f,fc,cliOpts:[...s.clientes].sort((a,b)=>a.nome.localeCompare(b.nome)).map(c=>({id:c.id,nome:c.nome})),
+      quickClient:()=>this.openNewClient(),createCharge:()=>this.createCharge(),createClient:()=>this.createClient(),
+      fNote:!!(fv&&fu!==fv),fNoteText:`Valor com centavos de identificação: ${money(fu)}`,fErr:!!s.err,fErrText:s.err
+    };
+  }
+}
+</script>
+</body>
+</html>
