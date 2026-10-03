@@ -301,6 +301,16 @@ textarea{min-height:140px;resize:vertical;line-height:1.45}
 .pay-qr{margin-top:14px;background:var(--card);border-radius:20px;box-shadow:var(--shadow)}
 .pay-qr summary{padding:16px 18px;font-weight:700;color:var(--ink);cursor:pointer}
 .pay-qr .qr{margin-top:0;margin-bottom:18px}
+.pay-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;margin:0 0 18px;background:var(--bg);border-radius:16px}
+.pay-tab{min-height:46px;border:0;border-radius:12px;background:transparent;color:var(--ink-2);font:700 16px/1 var(--body);cursor:pointer}
+.pay-tab[aria-selected="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(24,32,58,.14),0 0 0 1px var(--line)}
+.pay-tab:focus-visible{outline:3px solid var(--hl);outline-offset:1px}
+.pay [hidden]{display:none}
+.pay-card .qr{margin:0 auto 14px}
+.pay-qrhint{margin:0;color:var(--muted);font-size:15px}
+.pay .btn.feito{background:var(--green-bg);color:var(--green)}
+.pay-seguro{margin:20px 0 0;padding-top:14px;border-top:1px solid var(--line);font-size:14px;line-height:1.45;color:var(--muted);text-align:left}
+.pay-seguro strong{color:var(--text)}
 .pay-foot{margin:22px 0 0;color:var(--muted);font-size:13px;text-align:center}
 body.modo-pagar .tabs,body.modo-pagar .fab,body.modo-pagar .date{display:none}
 body.modo-pagar main{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
@@ -421,9 +431,12 @@ function pixKey(){
   return k;
 }
 function pixPayload(cents, txid){
-  const key = pixKey(); if (!key) return '';
-  const nome = ascii(state.settings.nome).slice(0,25) || 'RECEBEDOR';
-  const cidade = ascii(state.settings.cidade).toUpperCase().slice(0,15) || 'BRASIL';
+  return pixPayloadRaw(pixKey(), cents, txid, state.settings.nome, state.settings.cidade);
+}
+function pixPayloadRaw(key, cents, txid, nomeRaw, cidadeRaw){
+  if (!key) return '';
+  const nome = ascii(nomeRaw).slice(0,25) || 'RECEBEDOR';
+  const cidade = ascii(cidadeRaw).toUpperCase().slice(0,15) || 'BRASIL';
   const tx = (String(txid||'').replace(/[^A-Za-z0-9]/g,'').slice(0,25)) || '***';
   const p = tlv('00','01') + tlv('26', tlv('00','br.gov.bcb.pix') + tlv('01', key)) + tlv('52','0000') + tlv('53','986')
           + tlv('54', (cents/100).toFixed(2)) + tlv('58','BR') + tlv('59', nome) + tlv('60', cidade) + tlv('62', tlv('05', tx)) + '6304';
@@ -476,24 +489,43 @@ function mensagem(c){
 function b64url(s){ return btoa(unescape(encodeURIComponent(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
 function unb64url(s){ s = s.replace(/-/g,'+').replace(/_/g,'/'); while (s.length % 4) s += '='; return decodeURIComponent(escape(atob(s))); }
 function dadosPagamento(c){ return {p: pixPayload(c.valor, c.id), n: state.settings.nome, d: c.descricao, v: c.valor, e: c.venc}; }
-function modoEnvio(){ return (state.settings.envio === 'duas' || !state.settings.linkBase) ? 'duas' : 'link'; }
+/* Link curto: leva só chave, valor e identificação; a página remonta o código Pix. Formato: [chave, centavos, txid, nome, cidade, descrição, vencimento] */
+function payloadCompacto(c){ return [pixKey(), c.valor, c.id, state.settings.nome, state.settings.cidade, c.descricao, c.venc]; }
+function dadosDeLink(a){
+  const [chave, v, tx, nome, cidade, desc, venc] = a;
+  if (!chave || !Number.isInteger(v) || v <= 0) throw new Error('link inválido');
+  return {p: pixPayloadRaw(chave, v, tx, nome, cidade), n: nome, d: desc, v, e: venc};
+}
+function linkBaseAuto(){ const b = String(state.settings.linkBase||'').trim(); if (b) return b; return /^https?:$/.test(location.protocol) ? location.origin + location.pathname : ''; }
+function modoEnvio(){ return (state.settings.envio === 'duas' || !linkBaseAuto()) ? 'duas' : 'link'; }
 function linkPagamento(c){
-  const base = String(state.settings.linkBase||'').trim(); const pix = pixPayload(c.valor, c.id);
+  const base = linkBaseAuto(); const pix = pixPayload(c.valor, c.id);
   if (!base || !pix) return '';
-  return base.split('#')[0] + '#pagar=' + b64url(JSON.stringify(dadosPagamento(c)));
+  return base.split('#')[0] + '#pagar=' + b64url(JSON.stringify(payloadCompacto(c)));
 }
 function paginaPagamento(d, preview){
+  const quem = d.n || 'Quem cobrou';
   return `<div class="pay">
     ${preview ? '<p class="pay-nota">É assim que seu cliente vê a página ao tocar no link.</p>' : ''}
     <div class="pay-card">
       ${avatar(d.n, true)}
-      <p class="pay-who">${esc(d.n)} está cobrando</p>
+      <p class="pay-who">${esc(quem)} está cobrando</p>
       <p class="pay-val"><span class="hl">${money(d.v)}</span></p>
       <p class="pay-desc">${esc(d.d)}. Vencimento em ${fmtDLong(d.e)}</p>
-      <button class="btn wa block lg" data-action="copy-raw" data-code="${esc(d.p)}">${ICON.copy}Copiar código Pix</button>
-      <ol class="pay-passos"><li>Toque em Copiar código Pix</li><li>Abra o app do seu banco e escolha Pix</li><li>Use a opção Pix copia e cola e confirme</li></ol>
+      <div class="pay-tabs" role="tablist" aria-label="Como pagar">
+        <button class="pay-tab" role="tab" id="tab-codigo" aria-selected="true" aria-controls="pay-codigo" data-action="pay-tab" data-tab="codigo">Copiar código</button>
+        <button class="pay-tab" role="tab" id="tab-qr" aria-selected="false" aria-controls="pay-qr" data-action="pay-tab" data-tab="qr">QR Code</button>
+      </div>
+      <div id="pay-codigo" role="tabpanel" aria-labelledby="tab-codigo">
+        <button class="btn wa block lg" data-action="copy-raw" data-code="${esc(d.p)}">${ICON.copy}Copiar código Pix</button>
+        <ol class="pay-passos"><li>Toque em Copiar código Pix</li><li>Abra o app do seu banco e escolha Pix</li><li>Use a opção Pix copia e cola e confirme</li></ol>
+      </div>
+      <div id="pay-qr" role="tabpanel" aria-labelledby="tab-qr" hidden>
+        <div class="qr" id="payqr"></div>
+        <p class="pay-qrhint">Em outro aparelho, abra o app do banco, escolha Pix e aponte a câmera para o QR Code.</p>
+      </div>
+      <p class="pay-seguro">O pagamento é feito por Pix para <strong>${esc(quem)}</strong>. Confira esse nome no app do seu banco antes de confirmar.</p>
     </div>
-    <details class="pay-qr"><summary>Prefiro pagar com QR Code</summary><div class="qr" id="payqr"></div></details>
     ${preview ? '' : '<p class="pay-foot">Cobrança organizada com o Caderninho</p>'}
   </div>`;
 }
@@ -773,7 +805,7 @@ function vAjustes(){
       <label class="opcao"><input type="radio" name="envio" value="duas" ${s.envio === 'duas' ? 'checked' : ''}><span><strong>Duas mensagens</strong><span>Primeiro o texto, depois o código sozinho para copiar.</span></span></label>
     </div>
     <div class="card-form">
-      <label>Endereço da página de pagamento<span class="hint">Necessário para o envio com link.</span><input name="linkBase" type="url" inputmode="url" placeholder="https://seunome.github.io/caderninho/" value="${esc(s.linkBase||'')}"></label>
+      <label>Endereço da página de pagamento<span class="hint">Opcional: se ficar vazio, o app usa o endereço em que está aberto agora.</span><input name="linkBase" type="url" inputmode="url" placeholder="https://seunome.github.io/caderninho/" value="${esc(s.linkBase||'')}"></label>
       <label class="switch-row"><span><strong>Centavos de identificação</strong><span class="hint">Cada cobrança ganha centavos únicos, como R$ 250,03, para você saber quem pagou só de olhar o extrato.</span></span><input type="checkbox" class="switch" name="centavosId" ${s.centavosId ? 'checked' : ''}></label>
     </div>
     <button class="btn block lg" type="submit">Salvar dados</button>
@@ -784,7 +816,7 @@ function vAjustes(){
     <div class="card-form">${Object.keys(DEFAULT_T).map(k => `<details class="tpl"><summary>${ETAPA_NOME[k]}</summary><textarea name="${k}" aria-label="${esc(ETAPA_NOME[k])}">${esc(t[k])}</textarea></details>`).join('')}</div>
     <div class="two"><button class="btn" type="submit">Salvar mensagens</button><button class="btn soft" type="button" data-action="reset-t">Restaurar padrão</button></div>
   </form>
-  <section class="grupo"><h2>Dados deste aparelho</h2><p class="grupo-desc">Tudo fica salvo só neste navegador, sem servidor.</p>
+  <section class="grupo"><h2>Dados deste aparelho</h2><p class="grupo-desc">Tudo fica salvo só neste navegador, sem servidor. Versão 3 · link curto.</p>
     <div class="two"><button class="btn soft" data-action="demo">Carregar exemplo</button><button class="btn danger" data-action="wipe">Apagar tudo</button></div></section>`;
 }
 
@@ -847,10 +879,10 @@ function sheetClient(id){
 function marcarPago(id){ const c = state.cobrancas.find(x => x.id === id); if (!c) return; c.status = 'paga'; c.pagaEm = todayStr(); save(); closeSheet(); render(); toast(`${money(c.valor)} recebido`); }
 function registrarContato(id){ const c = state.cobrancas.find(x => x.id === id); if (!c) return; (c.contatos ||= []).push({data: todayStr(), etapa: info(c).etapa}); save();
   setTimeout(() => { render(); if (pixPayload(c.valor, c.id) && modoEnvio() === 'duas') sheetPasso2(c); else { closeSheet(); toast('Cobrança registrada'); } }, 400); }
-async function copiar(t){
-  try { await navigator.clipboard.writeText(t); toast('Pix copia e cola copiado'); }
+async function copiar(t, mudo){
+  try { await navigator.clipboard.writeText(t); if (!mudo) toast('Pix copia e cola copiado'); }
   catch(e){ const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select();
-    try { document.execCommand('copy'); toast('Pix copia e cola copiado'); } catch(_) { toast('Selecione e copie o código manualmente'); } ta.remove(); }
+    try { document.execCommand('copy'); if (!mudo) toast('Pix copia e cola copiado'); } catch(_) { toast('Selecione e copie o código manualmente'); } ta.remove(); }
 }
 function demo(){
   if (state.clientes.length && !confirm('Isso substitui os dados atuais pelos de exemplo. Continuar?')) return;
@@ -908,7 +940,14 @@ document.addEventListener('click', e => {
   switch(a){
     case 'close': closeSheet(); break;
     case 'ver-atrasadas': tab = 'cobrancas'; filtro = 'atrasadas'; render(); window.scrollTo(0,0); break;
-    case 'copy-raw': copiar(el.dataset.code).then(() => { if (document.body.classList.contains('modo-pagar')) toast('Código copiado. Agora abra o app do seu banco.'); }); break;
+    case 'copy-raw': { const pagar = document.body.classList.contains('modo-pagar');
+      copiar(el.dataset.code, pagar).then(() => { if (pagar){
+      el._orig = el._orig || el.innerHTML; el.innerHTML = ICON.check + 'Copiado. Abra o app do banco'; el.classList.add('feito');
+      clearTimeout(el._t); el._t = setTimeout(() => { el.innerHTML = el._orig; el.classList.remove('feito'); }, 5000);
+    } }); break; }
+    case 'pay-tab': { const t = el.dataset.tab;
+      document.querySelectorAll('.pay-tab').forEach(b => b.setAttribute('aria-selected', String(b === el)));
+      $('#pay-codigo').hidden = t !== 'codigo'; $('#pay-qr').hidden = t !== 'qr'; break; }
     case 'pay-preview': { const c = state.cobrancas.find(x => x.id === id);
       openSheet(head('Página de pagamento') + paginaPagamento(dadosPagamento(c), true)); desenharQR($('#payqr'), pixPayload(c.valor, c.id)); break; }
     case 'goto': tab = el.dataset.tab; render(); break;
@@ -958,7 +997,7 @@ document.addEventListener('submit', e => {
     const lb = (v.linkBase||'').trim();
     if (lb && !/^https:\/\/[^\s]+\.[^\s]+/.test(lb)) return toast('O endereço da página precisa começar com https://');
     Object.assign(state.settings, {nome:v.nome.trim(), cidade:v.cidade.trim(), pixTipo:v.pixTipo, pixChave:v.pixChave.trim(), linkBase:lb, centavosId: !!v.centavosId, envio: v.envio === 'duas' ? 'duas' : 'link'});
-    if (v.envio !== 'duas' && !lb) toast('Sem endereço da página, o envio continua em duas mensagens');
+    if (v.envio !== 'duas' && !linkBaseAuto()) toast('Sem endereço da página, o envio continua em duas mensagens');
     save(); render(); toast('Dados de recebimento salvos');
   }
   if (f.dataset.form === 'templates'){
@@ -995,7 +1034,8 @@ function iniciar(){
   const m = location.hash.match(/^#pagar=(.+)$/);
   if (m){
     try {
-      const d = JSON.parse(unb64url(m[1]));
+      const raw = JSON.parse(unb64url(m[1]));
+      const d = Array.isArray(raw) ? dadosDeLink(raw) : raw;
       if (!d.p || crc16(d.p.slice(0,-4)) !== d.p.slice(-4)) throw new Error('código inválido');
       document.body.classList.add('modo-pagar');
       $('#view').innerHTML = paginaPagamento(d, false); desenharQR($('#payqr'), d.p);
