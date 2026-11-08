@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Caderninho — cobranças em dia</title>
 <meta name="description" content="Toque para copiar o código Pix ou ver o QR Code.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#F1F3F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1320" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Caderninho">
 <meta property="og:title" content="Pagamento via Pix">
 <meta property="og:description" content="Toque para copiar o código Pix ou ver o QR Code.">
 <meta property="og:type" content="website">
@@ -331,6 +338,10 @@ body.modo-pagar main{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))
 .tabs button[aria-current="page"] .ic{background:var(--hl)}
 .tabs button[aria-current="page"] svg{color:#1F2F6B}
 
+.upd{position:fixed;left:12px;right:12px;bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:25;max-width:596px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;background:var(--text);color:var(--bg);box-shadow:var(--shadow)}
+.upd[hidden]{display:none}
+.upd span{flex:1;font-weight:700;font-size:15px}
+.upd button{min-height:44px;padding:0 16px;border:0;border-radius:12px;background:var(--hl);color:#1F2F6B;font-weight:700}
 #toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;z-index:30;background:var(--text);color:var(--bg);padding:12px 18px;border-radius:14px;font-weight:700;font-size:15px;max-width:calc(100% - 32px);transition:opacity .2s,transform .2s;pointer-events:none;box-shadow:var(--shadow)}
 #toast.on{opacity:1;transform:translate(-50%,0)}
 @media (max-width:360px){.two{grid-template-columns:1fr}.cob-acts{grid-template-columns:1fr}}
@@ -352,6 +363,7 @@ body.modo-pagar main{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))
   <div class="sheet-backdrop" data-action="close"></div>
   <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="sheet-title"><div id="sheet-body"></div></div>
 </div>
+<div class="upd" id="upd" role="status" hidden><span>Nova versão do Caderninho disponível</span><button type="button" id="upd-btn">Atualizar</button></div>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -1096,6 +1108,26 @@ function iniciar(){
   render();
 }
 iniciar();
+
+/* ---------- Instalar como app, funcionar sem internet e atualizar sozinho ---------- */
+if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+const hashTxt = t => { let h = 5381; for (let i = 0; i < t.length; i++) h = ((h << 5) + h + t.charCodeAt(i)) | 0; return h; };
+let versaoAtual = null;
+async function lerVersao(){
+  try { const r = await fetch(location.pathname, {cache:'no-store'}); return r.ok ? hashTxt(await r.text()) : null; }
+  catch(e){ return null; }
+}
+async function checarVersao(){
+  if (document.body.classList.contains('modo-pagar')) return;
+  const v = await lerVersao(); if (v === null) return;
+  if (versaoAtual === null){ versaoAtual = v; return; }
+  if (v !== versaoAtual) $('#upd').hidden = false;
+}
+$('#upd-btn').addEventListener('click', () => location.reload());
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') checarVersao(); });
+checarVersao();
 </script>
 </body>
 </html>
