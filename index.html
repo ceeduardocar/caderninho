@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('caderninho.tema');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 <style>
 :root{
   --bg:#F1F3F9; --card:#FFFFFF; --line:#E2E7F1; --ink:#1F2F6B; --ink-2:#56648C;
@@ -63,6 +64,9 @@ svg{flex:none}
 .brand{display:flex;align-items:center;gap:8px;font:800 20px/1 var(--display);color:var(--ink);letter-spacing:-.01em}
 .brand svg{width:26px;height:26px}
 .date{color:var(--muted);font-size:15px}
+.top-r{display:flex;align-items:center;gap:10px}
+.tema-btn{width:44px;height:44px;border-radius:50%;border:0;background:var(--card);color:var(--ink);box-shadow:var(--shadow);display:inline-flex;align-items:center;justify-content:center}
+.tema-btn svg{width:20px;height:20px}
 main{padding-bottom:calc(110px + env(safe-area-inset-bottom,0px))}
 
 h1{font:800 30px/1.1 var(--display);color:var(--ink);margin:14px 0 4px;letter-spacing:-.02em}
@@ -109,7 +113,7 @@ h2{font:700 19px/1.2 var(--display);color:var(--ink);margin:0}
 .cobs{display:grid;gap:12px}
 .cob{background:var(--card);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;position:relative}
 .cob::before{content:"";position:absolute;left:0;top:16px;bottom:16px;width:4px;border-radius:0 4px 4px 0;background:var(--st,var(--line))}
-.cob.st-b-lembrete{--st:var(--ink-2)} .cob.st-b-hoje{--st:var(--amber)} .cob.st-b-atraso,.cob.st-b-firme{--st:var(--red)}
+.cob.st-b-lembrete{--st:var(--amber)} .cob.st-b-hoje{--st:var(--amber)} .cob.st-b-atraso,.cob.st-b-firme{--st:var(--red)}
 .cob-top{display:flex;align-items:center;gap:12px;width:100%;padding:16px 16px 12px 18px;background:none;border:0;text-align:left}
 .cob-amt{font:800 20px/1.1 var(--display);font-variant-numeric:tabular-nums;color:var(--text)}
 .cob-acts{display:grid;grid-template-columns:1fr auto;gap:8px;padding:0 16px 16px 18px}
@@ -144,7 +148,7 @@ h2{font:700 19px/1.2 var(--display);color:var(--ink);margin:0}
 
 /* Situação */
 .chip-st{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:700;white-space:nowrap}
-.st-lembrete,.st-pend{background:var(--blue-bg);color:var(--ink)}
+.st-lembrete,.st-pend{background:var(--amber-bg);color:var(--amber)}
 .st-hoje{background:var(--amber-bg);color:var(--amber)}
 .st-atraso,.st-atras{background:var(--red-bg);color:var(--red)}
 .st-firme{background:var(--red);color:var(--card)}
@@ -212,7 +216,7 @@ table.ano th:first-child,table.ano td:first-child{position:sticky;left:0;z-index
 .cel{width:28px;height:28px;border-radius:50%;border:0;font-weight:800;font-size:14px;display:inline-flex;align-items:center;justify-content:center;padding:0}
 .s-pago{background:var(--green);color:var(--card)}
 .s-tarde{background:var(--amber-bg);color:var(--amber);box-shadow:inset 0 0 0 2px var(--amber)}
-.s-pend{background:transparent;color:var(--ink-2);box-shadow:inset 0 0 0 2px var(--line)}
+.s-pend{background:transparent;color:var(--amber);box-shadow:inset 0 0 0 2px var(--amber)}
 .s-atras{background:var(--red);color:var(--card)}
 .s-vazio{color:var(--line);cursor:default;background:none}
 .legenda{display:flex;flex-wrap:wrap;gap:10px 18px;margin:14px 2px 0;padding:0;list-style:none;font-size:14px;color:var(--muted)}
@@ -312,7 +316,7 @@ textarea{min-height:140px;resize:vertical;line-height:1.45}
 .pay-seguro{margin:20px 0 0;padding-top:14px;border-top:1px solid var(--line);font-size:14px;line-height:1.45;color:var(--muted);text-align:left}
 .pay-seguro strong{color:var(--text)}
 .pay-foot{margin:22px 0 0;color:var(--muted);font-size:13px;text-align:center}
-body.modo-pagar .tabs,body.modo-pagar .fab,body.modo-pagar .date{display:none}
+body.modo-pagar .tabs,body.modo-pagar .fab,body.modo-pagar .date,body.modo-pagar .tema-btn{display:none}
 body.modo-pagar main{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
 
 /* Botão flutuante e navegação inferior */
@@ -333,7 +337,7 @@ body.modo-pagar main{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))
 </style>
 </head>
 <body>
-<header class="top"><div class="wrap"><div class="brand"><svg viewBox="0 0 28 28" aria-hidden="true"><rect x="5" y="3" width="18" height="22" rx="3.5" fill="#FFE14D"/><rect x="5" y="3" width="18" height="22" rx="3.5" fill="none" stroke="#1F2F6B" stroke-width="2"/><path d="M10 10h8M10 14h8M10 18h5" stroke="#1F2F6B" stroke-width="2" stroke-linecap="round"/><path d="M5 8H3M5 14H3M5 20H3" stroke="#1F2F6B" stroke-width="2" stroke-linecap="round"/></svg>Caderninho</div><div class="date" id="topdate"></div></div></header>
+<header class="top"><div class="wrap"><div class="brand"><svg viewBox="0 0 28 28" aria-hidden="true"><rect x="5" y="3" width="18" height="22" rx="3.5" fill="#FFE14D"/><rect x="5" y="3" width="18" height="22" rx="3.5" fill="none" stroke="#1F2F6B" stroke-width="2"/><path d="M10 10h8M10 14h8M10 18h5" stroke="#1F2F6B" stroke-width="2" stroke-linecap="round"/><path d="M5 8H3M5 14H3M5 20H3" stroke="#1F2F6B" stroke-width="2" stroke-linecap="round"/></svg>Caderninho</div><div class="top-r"><div class="date" id="topdate"></div><button class="tema-btn" id="tema" type="button" aria-label="Mudar tema"></button></div></div></header>
 <main><div class="wrap" id="view"></div></main>
 
 <nav class="tabs" aria-label="Seções"><div class="wrap">
@@ -460,13 +464,13 @@ function info(c){
   if (d === 0) return {etapa:'hoje', label:'Vence hoje', dias:0};
   return {etapa: d < 7 ? 'atraso' : 'firme', label:`Atrasada há ${d} ${plural(d,'dia','dias')}`, dias:d};
 }
-/* Régua: 2 dias antes, no dia, 3 e 7 dias depois, e depois a cada 7 dias */
+/* Régua: na véspera, no dia, 3 e 7 dias depois, e depois a cada 7 dias */
 function precisaCobrar(c){
   if (c.status === 'paga') return false;
   const d = diffDays(todayStr(), c.venc);
-  if (d < -2) return false;
-  let p = -2;
-  for (const q of [-2,0,3,7]) if (q <= d) p = q;
+  if (d < -1) return false;
+  let p = -1;
+  for (const q of [-1,0,3,7]) if (q <= d) p = q;
   if (d >= 14) p = Math.floor(d/7)*7;
   const ponto = addDays(c.venc, p);
   const ultimo = (c.contatos||[]).map(x => x.data).sort().pop();
@@ -660,7 +664,7 @@ function vHoje(){
   if (state.cobrancas.length){
     h += `<div class="sec-head"><h2>Cobrar hoje</h2>${cobrar.length ? `<span class="count">${cobrar.length}</span>` : ''}</div>`;
     h += cobrar.length ? `<div class="cobs">${cobrar.map(cardCobrar).join('')}</div>`
-      : vazio('Tudo em dia por hoje', 'As cobranças aparecem aqui 2 dias antes do vencimento, no dia e quando atrasam.');
+      : vazio('Tudo em dia por hoje', 'As cobranças aparecem aqui na véspera do vencimento, no dia e quando atrasam.');
   }
   if (ab.length) h += `<div class="busca"><label for="busca">Recebeu um Pix? Ache quem pagou pelo valor</label>
     <div class="busca-box">${ICON.search}<input id="busca" inputmode="decimal" placeholder="Ex.: 250,03" autocomplete="off"></div><div class="busca-res" id="busca-res"></div></div>`;
@@ -855,8 +859,9 @@ function sheetChargeForm(id){
       <label>Cliente<select name="clienteId">${opts}<option value="__novo" ${semCliente?'selected':''}>+ Cadastrar novo cliente</option></select></label>
       <div id="novo-cli" ${semCliente ? '' : 'hidden'} class="two form-cli-novo"><label>Nome<input name="novoNome"></label><label>WhatsApp<input name="novoFone" inputmode="tel" placeholder="61 99999-9999"></label></div>
       <label>Referente a<input name="descricao" required value="${esc(c ? c.descricao : '')}" placeholder="Aula de outubro, conserto, diária"></label>
-      <div class="two"><label>Valor<div class="valor-box"><span>R$</span><input name="valor" required inputmode="decimal" placeholder="150,00" value="${c ? ((c.valor - (c.idc||0))/100).toFixed(2).replace('.',',') : ''}"></div></label>
+      <div class="two"><label><span id="lbl-valor">Valor</span><div class="valor-box"><span>R$</span><input name="valor" required inputmode="decimal" placeholder="150,00" value="${c ? ((c.valor - (c.idc||0))/100).toFixed(2).replace('.',',') : ''}"></div></label>
       <label>Vencimento<input name="venc" type="date" required value="${c ? c.venc : todayStr()}"></label></div>
+      ${c ? '' : `<label>Parcelas no Pix<select name="parcelas">${[1,2,3,4,5,6,8,10,12].map(n => `<option value="${n}">${n === 1 ? 'À vista (1x)' : n + 'x'}</option>`).join('')}</select><span class="hint" id="parc-prev">Uma cobrança só.</span></label>`}
       <button class="btn block lg" type="submit">${c ? 'Salvar cobrança' : 'Criar cobrança'}</button>
     </form>`);
 }
@@ -1020,6 +1025,16 @@ document.addEventListener('submit', e => {
       if (!v.novoNome.trim() || !v.novoFone.trim()) return toast('Preencha nome e WhatsApp do novo cliente');
       clienteId = uid(); state.clientes.push({id:clienteId, nome:v.novoNome.trim(), fone:v.novoFone.trim(), mensalidade:0, dia:0});
     }
+    const nParc = f.dataset.id ? 1 : Math.max(1, Math.min(12, parseInt(v.parcelas,10) || 1));
+    if (nParc > 1){
+      const gid = uid();
+      dividir(valor, nParc).forEach((parte, i) => {
+        const u = centavosUnicos(parte);
+        state.cobrancas.push({id:uid(), status:'aberta', contatos:[], clienteId, descricao:`${v.descricao.trim()} (${i+1}/${nParc})`,
+          valor:u.valor, idc:u.idc, venc:somaMeses(v.venc, i), grupo:gid, parcela:i+1, parcelas:nParc});
+      });
+      save(); closeSheet(); render(); toast(`${nParc} parcelas criadas, uma por mês`); return;
+    }
     const antiga = f.dataset.id ? state.cobrancas.find(x => x.id === f.dataset.id) : null;
     const u = (antiga && valor === antiga.valor - (antiga.idc||0)) ? {valor: antiga.valor, idc: antiga.idc||0} : centavosUnicos(valor, antiga && antiga.id);
     const dados = {clienteId, descricao:v.descricao.trim(), valor:u.valor, idc:u.idc, venc:v.venc};
@@ -1029,6 +1044,41 @@ document.addEventListener('submit', e => {
     save(); closeSheet(); render(); if (!u.idc) toast(f.dataset.id ? 'Cobrança salva' : 'Cobrança criada');
   }
 });
+
+/* ---------- Parcelas ---------- */
+function dividir(total, n){ const b = Math.floor(total / n); return Array.from({length:n}, (_, i) => i < n - 1 ? b : total - b * (n - 1)); }
+function somaMeses(s, k){
+  const [y, m, d] = s.split('-').map(Number); const alvo = new Date(y, m - 1 + k, 1);
+  const ult = new Date(alvo.getFullYear(), alvo.getMonth() + 1, 0).getDate();
+  return toStr(new Date(alvo.getFullYear(), alvo.getMonth(), Math.min(d, ult)));
+}
+function atualizarParcelas(f){
+  const sel = f.elements.parcelas; if (!sel) return;
+  const n = parseInt(sel.value, 10) || 1; const valor = parseMoney(f.elements.valor.value);
+  $('#lbl-valor').textContent = n > 1 ? 'Valor total' : 'Valor';
+  const prev = $('#parc-prev'); if (!prev) return;
+  if (n === 1) prev.textContent = 'Uma cobrança só.';
+  else if (!valor) prev.textContent = `${n} cobranças, uma por mês. Cada uma aparece em Cobrar hoje na véspera.`;
+  else { const p = dividir(valor, n); prev.textContent = `${n}x de ${money(p[0])}${p[n-1] !== p[0] ? ` (a última de ${money(p[n-1])})` : ''}, uma por mês. Cada uma aparece em Cobrar hoje na véspera.`; }
+}
+document.addEventListener('input', e => { const f = e.target.form; if (f && f.dataset.form === 'charge') atualizarParcelas(f); });
+document.addEventListener('change', e => { const f = e.target.form; if (f && f.dataset.form === 'charge') atualizarParcelas(f); });
+
+/* ---------- Tema claro/escuro ---------- */
+const MOON = svgI('<path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/>');
+function temaAtual(){ const t = document.documentElement.getAttribute('data-theme'); return t || (matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light'); }
+function pintarTema(){
+  const b = $('#tema'); if (!b) return; const escuro = temaAtual() === 'dark';
+  b.innerHTML = escuro ? ICON.sun : MOON; b.setAttribute('aria-label', escuro ? 'Mudar para o tema claro' : 'Mudar para o tema escuro');
+}
+function alternarTema(){
+  const n = temaAtual() === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', n);
+  try { localStorage.setItem('caderninho.tema', n); } catch(e){}
+  pintarTema();
+}
+$('#tema').addEventListener('click', alternarTema);
+try { matchMedia('(prefers-color-scheme:dark)').addEventListener('change', pintarTema); } catch(e){}
+pintarTema();
 
 function iniciar(){
   const m = location.hash.match(/^#pagar=(.+)$/);
